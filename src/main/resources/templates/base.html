@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:fragment="parent(content,title,script)" >
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/output.css}" />
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
+    <title th:replace="${title}">Document</title>
+</head>
+<body class="bg-white dark:bg-gray-800">
+   <!-- Include Navbar Fragment -->
+<div th:if="${showNavbar}">
+    <div th:replace="fragments/navbar :: navbar"></div>
+</div>
+
+
+
+
+
+
+    <!-- This is where content will be inserted -->
+     <div class=" mt-16">
+    <section th:replace="${content}" class="  max-w-7xl mx-auto px-6 py-16 bg-white dark:bg-gray-500 transition-colors duration-500"></section>
+</div>
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+
+    <!-- yha pe js code aayega -->
+    <th:block th-replace="${script}"></th:block>
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"  th:replace="~{base :: parent(~{::#content},~{::#title},~{::#script})} ">
+
+
+<head>
+     <title id="title">Hospital Home</title>
+ 
+</head>
+
+<body >
+    <section id="content" class="min-h-screen grid place-items-center">
+        <div
+            class="w-[80%] max-w-sm p-6 bg-white border border-gray-300 rounded-2xl shadow-md dark:bg-gray-800 dark:border-gray-700 static">
+
+            <h2 class="text-xl font-bold text-center text-gray-800 dark:text-white mb-4">Create Account</h2>
+
+            <!-- Social Buttons -->
+            <div class="flex flex-col gap-3 mb-4">
+                <!-- <button class="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg">
+                    <img src="https://www.svgrepo.com/show/475656/facebook-color.svg" alt="fb" class="h-5 w-5"> Continue with Facebook
+                </button> -->
+                <button
+                    class="flex items-center justify-center gap-2 bg-white text-gray-700 border border-gray-300 hover:bg-gray-100 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:hover:bg-gray-600 py-2 px-4 rounded-lg">
+                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="google" class="h-5 w-5">
+                    Continue with Google
+                </button>
+                <!-- <button class="flex items-center justify-center gap-2 bg-black hover:bg-gray-900 text-white py-2 px-4 rounded-lg">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 384 512" xmlns="http://www.w3.org/2000/svg"><path d="M318.7..."/></svg> Continue with Apple
+                </button> -->
+            </div>
+
+            <!-- Divider -->
+            <div class="flex items-center mb-4">
+                <hr class="flex-grow border-gray-300 dark:border-gray-600" />
+                <span class="mx-2 text-sm text-gray-400">or</span>
+                <hr class="flex-grow border-gray-300 dark:border-gray-600" />
+            </div>
+
+            <!-- Form -->
+            <form th:action="@{/do-register}" th:object="${userform}" method="post" class="space-y-2">
+                <!-- Name -->
+
+
+                <div>
+                    <label for="name" class="block text-sm font-medium text-gray-900 dark:text-white">Name</label>
+                    <input type="text" id="name" th:field="*{name}" placeholder="Your name" required
+                        class="w-full mt-1 p-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white" />
+                </div>
+
+                <!-- Email -->
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-900 dark:text-white">Email</label>
+                    <input type="email" id="email" th:field="*{email}" placeholder="@gmail.com" required
+                        class="w-full mt-1 p-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white" />
+                </div>
+
+                <!-- Phone -->
+                <div>
+                    <label for="phone" class="block text-sm font-medium text-gray-900 dark:text-white">Phone</label>
+                    <input type="tel" id="phone" th:field="*{phoneNumber}" pattern="[0-9]{10}" maxlength="10"
+                        placeholder="123-456-789" required
+                        class="w-full mt-1 p-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white" />
+                    <small class="text-xs text-gray-500 dark:text-gray-400">Must be 10 digits</small>
+                </div>
+
+                <!-- Password -->
+                <div>
+                    <label for="password"
+                        class="block text-sm font-medium text-gray-900 dark:text-white">Password</label>
+                    <input type="password" id="password" th:field="*{password}" placeholder="••••••••" required
+                        class="w-full mt-1 p-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white" />
+                    <!-- <div id="strengthBar" class="h-2 mt-2 rounded bg-gray-300"></div>
+                    <p id="strengthText" class="text-sm mt-1"></p> -->
+                </div>
+
+                <!-- Confirm Password -->
+                <div>
+                    <label for="confirm-password"
+                        class="block text-sm font-medium text-gray-900 dark:text-white">Confirm Password</label>
+                    <input type="password" id="confirm-password" placeholder="••••••••" required
+                        class="w-full mt-1 p-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white" />
+                    <!-- <p id="matchText" class="text-sm mt-1 text-red-600"></p> -->
+                </div>
+
+                <!-- Submit -->
+                <div class="flex justify-center pt-2">
+                    <button type="submit"
+                        class="w-48 bg-blue-700 hover:bg-blue-800 text-white py-2.5 px-4 rounded-lg font-medium">
+                        Create Account
+                    </button>
+                </div>
+                <div id="script">
+                    <script>
+                        const password = document.getElementById("password");
+                        const confirmPassword = document.getElementById("confirmPassword");
+                        const strengthBar = document.getElementById("strengthBar");
+                        const strengthText = document.getElementById("strengthText");
+                        const matchText = document.getElementById("matchText");
+
+                        password.addEventListener("input", updateStrength);
+                        confirmPassword.addEventListener("input", checkPasswordMatch);
+
+                        function updateStrength() {
+                            const val = password.value;
+                            let strength = 0;
+
+                            if (val.length >= 8) strength++;
+                            if (/[A-Z]/.test(val)) strength++;
+                            if (/[0-9]/.test(val)) strength++;
+                            if (/[\W_]/.test(val)) strength++;
+
+                            if (val.length === 0) {
+                                strengthBar.style.width = "0%";
+                                strengthText.textContent = "";
+                            } else if (strength <= 1) {
+                                strengthBar.style.width = "25%";
+                                strengthBar.style.backgroundColor = "#e53e3e";
+                                strengthText.textContent = "Weak";
+                                strengthText.style.color = "#e53e3e";
+                            } else if (strength === 2) {
+                                strengthBar.style.width = "50%";
+                                strengthBar.style.backgroundColor = "#d69e2e";
+                                strengthText.textContent = "Fair";
+                                strengthText.style.color = "#d69e2e";
+                            } else if (strength === 3) {
+                                strengthBar.style.width = "75%";
+                                strengthBar.style.backgroundColor = "#38a169";
+                                strengthText.textContent = "Good";
+                                strengthText.style.color = "#38a169";
+                            } else if (strength === 4) {
+                                strengthBar.style.width = "100%";
+                                strengthBar.style.backgroundColor = "#3182ce";
+                                strengthText.textContent = "Strong";
+                                strengthText.style.color = "#3182ce";
+                            }
+                        }
+
+                        function checkPasswordMatch() {
+                            if (confirmPassword.value !== password.value) {
+                                matchText.textContent = "Passwords do not match!";
+                            } else {
+                                matchText.textContent = "";
+                            }
+                        }
+                    </script>
+                       <script src="https://cdn.tailwindcss.com"></script>
+                </div>
+
+
+            </form>
+        </div>
+    </section>
+</body>
+
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{base :: parent(~{::#content},~{::#title},~{::#script})}">
+<head>
+    <title id="title">Login</title>
+</head>
+
+<body>
+<section id="content" class="min-h-screen grid place-items-center">
+  <div class="w-[80%] max-w-sm bg-white rounded-2xl shadow-md border border-gray-300 dark:bg-gray-800 dark:border-gray-700 p-6">
+    <h1 class="text-xl font-bold text-center text-gray-900 md:text-2xl dark:text-white mb-6">
+      Sign in to your account
+    </h1>
+    
+
+<div class="text-red-600 " th:if="${param.error}">Invalid Username and Password.</div>
+<div class="text-green-600" th:if="${param.logout}">You have been logged out.</div>
+
+    <form th:action="@{'/authenticate'}" method="post" class="space-y-4">
+
+       <!-- Social Buttons -->
+            <div class="flex flex-col gap-3 mb-4">
+              
+              <a th:href="@{/oauth2/authorization/google}" 
+   class="flex items-center justify-center gap-2 bg-white text-gray-700 border border-gray-300 hover:bg-gray-100 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:hover:bg-gray-600 py-2 px-4 rounded-lg">
+    <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="google" class="h-5 w-5">
+    Continue with Google
+</a>
+
+               
+            </div>
+             <!-- Divider -->
+            <div class="flex items-center mb-4">
+                <hr class="flex-grow border-gray-300 dark:border-gray-600" />
+                <span class="mx-2 text-sm text-gray-400">or</span>
+                <hr class="flex-grow border-gray-300 dark:border-gray-600" />
+            </div>
+      <!-- Email -->
+      <div>
+        <label for="email" class="block text-sm font-medium text-gray-900 dark:text-white">Your email</label>
+        <input type="email" name="email" id="email" th:value="${email}"
+          class="w-full mt-1 p-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white"
+          placeholder="name@company.com" required>
+      </div>
+
+      <!-- Password -->
+      <div>
+        <label for="password" class="block text-sm font-medium text-gray-900 dark:text-white">Password</label>
+        <input type="password" name="password" id="password"
+          placeholder="••••••••"
+          class="w-full mt-1 p-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white"
+          required>
+      </div>
+
+      <!-- Remember + Forgot -->
+      <div class="flex items-center justify-between">
+        <label class="flex items-center text-sm text-gray-500 dark:text-gray-300">
+          <input id="remember" type="checkbox"
+            class="w-4 h-4 mr-2 border border-gray-300 rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600" >
+          Remember me
+        </label>
+        <a href="#" class="text-sm text-blue-600 hover:underline dark:text-blue-400">Forgot password?</a>
+      </div>
+
+      <!-- Submit -->
+      <!-- Submit -->
+                <div class="flex justify-center pt-2">
+                    <button type="submit"
+                        class="w-48 bg-blue-700 hover:bg-blue-800 text-white py-2.5 px-4 rounded-lg font-medium">
+                        Submit
+                    </button>
+                </div>
+
+      <!-- Signup Link -->
+      <p class="text-sm font-light text-center text-gray-500 dark:text-gray-400">
+        Don’t have an account yet? <a href="#" class="font-medium text-blue-600 hover:underline dark:text-blue-500">Sign up</a>
+      </p>
+    </form>
+  </div>
+</section>
+
+<th:block id="script">
+  <script src="https://cdn.tailwindcss.com"></script>
+</th:block>
+</body>
+</html>

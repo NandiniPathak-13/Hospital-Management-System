@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hospital Admin Panel</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .modal-overlay {
+      background: rgba(0, 0, 0, 0.5);
+    }
+  </style>
+</head>
+<body class="flex h-screen bg-gray-100 font-sans">
+
+  <!-- Sidebar -->
+  <aside class="w-64 bg-white shadow-lg flex flex-col p-4 space-y-6">
+    <h2 class="text-xl font-bold text-gray-700 mb-6">Admin Panel</h2>
+    <nav class="flex flex-col space-y-3">
+      <button class="text-left px-3 py-2 rounded hover:bg-blue-500 hover:text-white transition" onclick="showSection('userSection')">User</button>
+      <button class="text-left px-3 py-2 rounded hover:bg-blue-500 hover:text-white transition" onclick="showSection('appointmentSection')">Appointment</button>
+      <button class="text-left px-3 py-2 rounded hover:bg-blue-500 hover:text-white transition" onclick="showSection('hospitalSection')">Hospital</button>
+    </nav>
+  </aside>
+
+  <!-- Main content area -->
+  <main class="flex-1 p-8 overflow-auto relative">
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">Welcome to Hospital Admin Dashboard</h1>
+    <p class="text-gray-600 mb-8">Click options on the left sidebar to manage entities.</p>
+
+    <!-- User Section -->
+    <section id="userSection" class="hidden">
+      <h2 class="text-2xl font-semibold mb-4">User Management Coming Soon...</h2>
+    </section>
+
+    <!-- Appointment Section -->
+    <section id="appointmentSection" class="hidden">
+      <h2 class="text-2xl font-semibold mb-4">Appointment Management Coming Soon...</h2>
+    </section>
+
+    <!-- Hospital Section -->
+    <section id="hospitalSection">
+      <div class="flex space-x-4 mb-6">
+        <button class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition" onclick="showModal('addHospitalModal')">Add Hospital</button>
+        <button class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition" onclick="showModal('deleteHospitalModal')">Delete Hospital</button>
+        <button class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition" onclick="showModal('updateHospitalModal')">Update Hospital</button>
+      </div>
+
+      <!-- Add Hospital Modal -->
+      <div id="addHospitalModal" class="absolute inset-0 hidden modal-overlay z-50 flex justify-center items-start pt-20">
+        <div class="bg-white rounded-lg shadow-xl w-96 max-w-full p-6 relative">
+          <button onclick="closeModal('addHospitalModal')" class="absolute top-3 left-3 text-gray-600 hover:text-gray-900" title="Back">← Back</button>
+          <h3 class="text-xl font-semibold mb-4">Add Hospital</h3>
+          <form th:action="@{/save-admin}" th:object="${hospitalform}" method="post"  class="space-y-4">
+            <input type="text" name="name" th:field="*{name}" placeholder="Hospital Name" class="w-full border border-gray-300 rounded px-3 py-2" required />
+            <input type="text" name="city" th:field="*{city}" placeholder="City" class="w-full border border-gray-300 rounded px-3 py-2" required />
+            <input type="text" name="address"  th:field="*{address}" placeholder="Address" class="w-full border border-gray-300 rounded px-3 py-2" required />
+            <textarea name="description" th:field="*{description}" placeholder="Description" class="w-full border border-gray-300 rounded px-3 py-2"></textarea>
+            <input type="text" name="location" th:field="*{location}"  placeholder="Location (lat,long)" class="w-full border border-gray-300 rounded px-3 py-2" />
+            <input type="time" name="openingTime" th:field="*{openingTime}" class="w-full border border-gray-300 rounded px-3 py-2" required />
+            <input type="time" name="closingTime" th:field="*{closingTime}" class="w-full border border-gray-300 rounded px-3 py-2" required />
+            <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition">Add Hospital</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Delete Hospital Modal -->
+      <div id="deleteHospitalModal" class="absolute inset-0 hidden modal-overlay z-50 flex justify-center items-start pt-20">
+        <div class="bg-white rounded-lg shadow-xl w-3/4 max-w-4xl p-6 relative overflow-auto max-h-[80vh]">
+          <button onclick="closeModal('deleteHospitalModal')" class="absolute top-3 left-3 text-gray-600 hover:text-gray-900" title="Back">← Back</button>
+          <h3 class="text-xl font-semibold mb-4">Delete Hospital</h3>
+          <table class="w-full border-collapse border border-gray-300">
+            <thead>
+              <tr class="bg-gray-200">
+                <th class="border border-gray-300 px-4 py-2 text-left">ID</th>
+                <th class="border border-gray-300 px-4 py-2 text-left">Name</th>
+                <th class="border border-gray-300 px-4 py-2 text-left">City</th>
+                <th class="border border-gray-300 px-4 py-2 text-left">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="hospital : ${hospitals}">
+                <td class="border border-gray-300 px-4 py-2" th:text="${hospital.id}">1</td>
+                <td class="border border-gray-300 px-4 py-2" th:text="${hospital.name}">City Hospital</td>
+                <td class="border border-gray-300 px-4 py-2" th:text="${hospital.city}">New York</td>
+                <td class="border border-gray-300 px-4 py-2">
+                  <form th:action="@{/user/delete/{id}(id=${hospital.id})}" method="post" th:onsubmit="return confirm('Are you sure?')">
+                    <button type="submit" class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 transition">Delete</button>
+                  </form>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Update Hospital Modal -->
+      <div id="updateHospitalModal" class="absolute inset-0 hidden modal-overlay z-50 flex justify-center items-start pt-20">
+        <div class="bg-white rounded-lg shadow-xl w-3/4 max-w-4xl p-6 relative overflow-auto max-h-[80vh]">
+          <button onclick="closeModal('updateHospitalModal')" class="absolute top-3 left-3 text-gray-600 hover:text-gray-900" title="Back">← Back</button>
+          <h3 class="text-xl font-semibold mb-4">Update Hospital</h3>
+          <table class="w-full border-collapse border border-gray-300 mb-6">
+            <thead>
+              <tr class="bg-gray-200">
+                <th class="border border-gray-300 px-4 py-2 text-left">ID</th>
+                <th class="border border-gray-300 px-4 py-2 text-left">Name</th>
+                <th class="border border-gray-300 px-4 py-2 text-left">City</th>
+                <th class="border border-gray-300 px-4 py-2 text-left">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="hospital : ${hospitals}">
+                <td class="border border-gray-300 px-4 py-2" th:text="${hospital.id}">1</td>
+                <td class="border border-gray-300 px-4 py-2" th:text="${hospital.name}">City Hospital</td>
+                <td class="border border-gray-300 px-4 py-2" th:text="${hospital.city}">New York</td>
+                <td class="border border-gray-300 px-4 py-2">
+                  <button onclick="openUpdateForm([[${hospital.id}]])" class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 transition">Edit</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div id="updateFormContainer" class="hidden bg-gray-50 p-4 rounded border border-gray-300">
+            <form id="updateHospitalForm" th:action="@{/admin/hospital/update/__id__}" method="post" class="space-y-4">
+              <input type="hidden" name="id" id="updateHospitalId" />
+              <input type="text" id="updateName" name="name" placeholder="Hospital Name" class="w-full border border-gray-300 rounded px-3 py-2" required />
+              <input type="text" id="updateCity" name="city" placeholder="City" class="w-full border border-gray-300 rounded px-3 py-2" required />
+              <input type="text" id="updateAddress" name="address" placeholder="Address" class="w-full border border-gray-300 rounded px-3 py-2" required />
+              <textarea id="updateDescription" name="description" placeholder="Description" class="w-full border border-gray-300 rounded px-3 py-2"></textarea>
+              <input type="text" id="updateLocation" name="location" placeholder="Location (lat,long)" class="w-full border border-gray-300 rounded px-3 py-2" />
+              <input type="time" id="updateOpeningTime" name="openingTime" class="w-full border border-gray-300 rounded px-3 py-2" required />
+              <input type="time" id="updateClosingTime" name="closingTime" class="w-full border border-gray-300 rounded px-3 py-2" required />
+              <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">Update Hospital</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <script>
+    function showModal(id) {
+      document.getElementById(id).classList.remove('hidden');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
+      if (id === 'updateHospitalModal') {
+        document.getElementById('updateFormContainer').classList.add('hidden');
+      }
+    }
+
+    function showSection(sectionId) {
+      ['userSection', 'appointmentSection', 'hospitalSection'].forEach(id => {
+        document.getElementById(id).classList.add('hidden');
+      });
+      document.getElementById(sectionId).classList.remove('hidden');
+    }
+
+    function openUpdateForm(hospitalId) {
+      document.getElementById('updateFormContainer').classList.remove('hidden');
+      document.getElementById('updateHospitalId').value = hospitalId;
+      let form = document.getElementById('updateHospitalForm');
+      form.action = `/admin/hospital/update/${hospitalId}`;
+    }
+  </script>
+
+</body>
+</html>
