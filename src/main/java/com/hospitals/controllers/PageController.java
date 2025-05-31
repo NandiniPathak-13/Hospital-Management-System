@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.hospitals.entities.Hospital;
@@ -135,6 +136,16 @@ public String saveHospital(@ModelAttribute Hospitalform hospitalform, RedirectAt
     hospitalservice.saveHospital(hospital);
     redirectAttributes.addFlashAttribute("message", "Hospital added successfully!");
     return "redirect:/admin";
+}
+
+
+
+@RestController
+public class EnvCheckController {
+    @GetMapping("/envcheck")
+    public String checkEnv() {
+        return "Client ID from env: " + System.getenv("GOOGLE_CLIENT_ID");
+    }
 }
 
 
