@@ -14,12 +14,12 @@
                 <p class="text-sm text-gray-600 mt-2">Opening Time: <span th:text="${hospital.openingTime}">9:00 AM</span></p>
                 <p class="text-sm text-gray-600">Closing Time: <span th:text="${hospital.closingTime}">5:00 PM</span></p>
             </div>
-            <div class="mt-4 text-right">
-                <a th:href="@{'/admin/hospitals/view/' + ${hospital.id}}"
-                   class="text-sm bg-blue-500 hover:bg-blue-600 text-white px-4 py-1 rounded-lg transition">
-                    View
-                </a>
-            </div>
+           <div class="mt-4 text-right">
+    <a th:href="@{/user/hospitals/{id}(id=${hospital.id})}"
+       class="text-sm bg-blue-500 hover:bg-blue-600 text-white px-4 py-1 rounded-lg transition">
+        View
+    </a>
+</div>
         </div>
     </div>
     </div>

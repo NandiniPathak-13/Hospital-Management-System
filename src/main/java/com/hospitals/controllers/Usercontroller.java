@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.hospitals.entities.Hospital;
 import com.hospitals.entities.User;
 import com.hospitals.helpers.Helper;
+import com.hospitals.repositories.HospitalRepo;
 import com.hospitals.repositories.Userrepo;
 import com.hospitals.services.Hospitalservice;
 import com.hospitals.services.Userservice;
@@ -41,6 +42,9 @@ public class Usercontroller {
     @Autowired
     private Hospitalservice hospitalService;
 
+@Autowired
+    private HospitalRepo hospitalRepository;
+
 
     @RequestMapping("/dashboard")
     public String dashboard(Model model) {
@@ -57,6 +61,17 @@ public class Usercontroller {
         hospitalService.deleteHospital(id);  // service method
         return "redirect:/admin";  // after delete, go back to dashboard
     }
+
+        @GetMapping("/hospitals/{id}") // ✅ Fixed URL pattern
+    public String showHospitalDetails(@PathVariable Long id, Model model) {
+       
+        Hospital hospital = hospitalRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Hospital not found with id: " + id));
+        model.addAttribute("hospital", hospital);
+          model.addAttribute("showNavbar", true);
+        return "user/hospitaldetails"; // Make sure this file exists in templates!
+    }
+
 
     // @RequestMapping("/profile")
     // public String userproofile(Model model, Principal principal) {
