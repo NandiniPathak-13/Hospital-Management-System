@@ -3,7 +3,7 @@ services:
     name: hospital-management-system
     runtime: java17
     plan: free
-    buildCommand: ./mvnw clean install
+    buildCommand: mvn clean install
     startCommand: java -jar target/Hospital-Management-2025-0.0.1-SNAPSHOT.jar
     envVars:
       - key: SPRING_PROFILES_ACTIVE
