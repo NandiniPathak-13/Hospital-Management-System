@@ -114,6 +114,13 @@ public class PageController {
         return "redirect:/home";
     }
 
+      @RequestMapping("/")
+public String Dashboard(Model model) {
+   model.addAttribute("showNavbar", true);
+    return "home"; // This matches your Thymeleaf template: admin.html
+}
+
+
    @GetMapping("/admin")
 public String adminDashboard(Model model) {
     model.addAttribute("hospitalform", new Hospitalform());
