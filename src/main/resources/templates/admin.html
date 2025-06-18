@@ -17,6 +17,8 @@
   <aside class="w-64 bg-white shadow-lg flex flex-col p-4 space-y-6">
     <h2 class="text-xl font-bold text-gray-700 mb-6">Admin Panel</h2>
     <nav class="flex flex-col space-y-3">
+      <button id="doctorBtn" class="text-left px-3 py-2 rounded hover:bg-blue-500 hover:text-white transition" onclick="showSection('doctorSection')">Doctor</button>
+
       <button class="text-left px-3 py-2 rounded hover:bg-blue-500 hover:text-white transition" onclick="showSection('userSection')">User</button>
       <button class="text-left px-3 py-2 rounded hover:bg-blue-500 hover:text-white transition" onclick="showSection('appointmentSection')">Appointment</button>
       <button class="text-left px-3 py-2 rounded hover:bg-blue-500 hover:text-white transition" onclick="showSection('hospitalSection')">Hospital</button>
@@ -36,7 +38,15 @@
     <!-- Appointment Section -->
     <section id="appointmentSection" class="hidden">
       <h2 class="text-2xl font-semibold mb-4">Appointment Management Coming Soon...</h2>
+       <div class="flex space-x-4 mb-6">
+    <button class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition" onclick="showModal('addDoctorModal')">Add Doctor</button>
+    <button class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition" onclick="showModal('deleteDoctorModal')">Delete Doctor</button>
+    <button class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition" onclick="showModal('updateDoctorModal')">Update Doctor</button>
+  </div>
     </section>
+
+
+
 
     <!-- Hospital Section -->
     <section id="hospitalSection">
