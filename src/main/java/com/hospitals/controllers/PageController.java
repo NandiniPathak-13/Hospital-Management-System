@@ -1,5 +1,7 @@
 package com.hospitals.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +26,10 @@ import jakarta.servlet.http.HttpServletRequest;
 public class PageController {
 
     @Autowired
+    private Hospitalservice hospitalService;
+
+
+    @Autowired
     private Userservice userservice;
 
     @Autowired
@@ -35,6 +41,8 @@ public class PageController {
         model.addAttribute("page", "home");
         model.addAttribute("showNavbar", true);
         model.addAttribute("currentPath", request.getRequestURI());
+         List<Hospital> hospitals = hospitalService.getAllHospitals();
+        model.addAttribute("hospitals", hospitals);
         return "home";
     }
 
@@ -111,6 +119,9 @@ public class PageController {
 
         // Success message
         redirectAttributes.addFlashAttribute("message", "Registration successful!");
+
+          
+           
         return "redirect:/home";
     }
 

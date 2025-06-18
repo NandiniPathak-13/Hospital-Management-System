@@ -10,14 +10,14 @@
      <h1 class="text-3xl font-bold mb-6 text-center">Hospital Dashboard</h1>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        <div th:each="hospital : ${hospitals}" class="bg-white rounded-2xl shadow-md p-4 flex flex-col justify-between">
+        <div th:each="hospital : ${hospitals}" class="bg-blue-300 rounded-2xl shadow-md p-4 flex flex-col justify-between">
             <div>
                 <h2 class="text-xl font-semibold text-gray-800" th:text="${hospital.name}">Hospital Name</h2>
                 <p class="text-sm text-gray-600 mt-2">Opening Time: <span th:text="${hospital.openingTime}">9:00 AM</span></p>
                 <p class="text-sm text-gray-600">Closing Time: <span th:text="${hospital.closingTime}">5:00 PM</span></p>
             </div>
            <div class="mt-4 text-right">
-    <a th:href="@{/user/hospitals/{id}(id=${hospital.id})}"
+    <a th:href="@{/login}"
        class="text-sm bg-blue-500 hover:bg-blue-600 text-white px-4 py-1 rounded-lg transition">
         View
     </a>
