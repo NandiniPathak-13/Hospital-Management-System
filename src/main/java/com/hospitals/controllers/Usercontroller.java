@@ -20,8 +20,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.hospitals.entities.Hospital;
 import com.hospitals.entities.User;
 import com.hospitals.helpers.Helper;
+import com.hospitals.repositories.Doctorrepo;
 import com.hospitals.repositories.HospitalRepo;
 import com.hospitals.repositories.Userrepo;
+import com.hospitals.services.Doctorservice;
 import com.hospitals.services.Hospitalservice;
 import com.hospitals.services.Userservice;
 
@@ -29,6 +31,12 @@ import com.hospitals.services.Userservice;
 @RequestMapping("/user")
 
 public class Usercontroller {
+
+@Autowired
+ private Doctorrepo doctor; 
+
+ @Autowired
+ private Doctorservice doctorservice;
 
     @Autowired
     private Userrepo userRepository;
@@ -69,6 +77,9 @@ public class Usercontroller {
                 .orElseThrow(() -> new RuntimeException("Hospital not found with id: " + id));
         model.addAttribute("hospital", hospital);
           model.addAttribute("showNavbar", true);
+model.addAttribute("doctor", doctor);
+
+        
         return "user/hospitaldetails"; // Make sure this file exists in templates!
     }
 
