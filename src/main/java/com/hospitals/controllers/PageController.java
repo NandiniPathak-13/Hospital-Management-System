@@ -12,11 +12,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.hospitals.entities.Doctor;
 import com.hospitals.entities.Hospital;
 import com.hospitals.entities.Provider;
 import com.hospitals.entities.User;
+import com.hospitals.forms.Doctorform;
 import com.hospitals.forms.Hospitalform;
 import com.hospitals.forms.Userform;
+import com.hospitals.services.Doctorservice;
 import com.hospitals.services.Hospitalservice;
 import com.hospitals.services.Userservice;
 
@@ -27,6 +30,9 @@ public class PageController {
 
     @Autowired
     private Hospitalservice hospitalService;
+
+@Autowired
+private Doctorservice doctorservice;
 
 
     @Autowired
@@ -136,12 +142,16 @@ public String Dashboard(Model model) {
 public String adminDashboard(Model model) {
     model.addAttribute("hospitalform", new Hospitalform());
     model.addAttribute("hospitals", hospitalservice.getAllHospitals());
+    model.addAttribute("doctorform", new Doctorform());
+    model.addAttribute("doctor", doctorservice.getAllDoctors());
+
     return "admin"; // This matches your Thymeleaf template: admin.html
 }
 
 
     @PostMapping("/save-admin")
-public String saveHospital(@ModelAttribute Hospitalform hospitalform, RedirectAttributes redirectAttributes) {
+public String saveHospital(@ModelAttribute Hospitalform hospitalform,
+        @ModelAttribute Doctorform doctorform, RedirectAttributes redirectAttributes) {
     Hospital hospital = new Hospital();
     hospital.setName(hospitalform.getName());
     hospital.setCity(hospitalform.getCity());
@@ -153,6 +163,18 @@ public String saveHospital(@ModelAttribute Hospitalform hospitalform, RedirectAt
 
     hospitalservice.saveHospital(hospital);
     redirectAttributes.addFlashAttribute("message", "Hospital added successfully!");
+
+    Doctor doctor = new Doctor();
+
+ doctor.setName(doctorform.getName());
+    doctor.setSpecialization(doctorform.getSpecialization());
+    doctor.setHospitalname(hospital.getName()); // or use from doctorform if needed
+    doctor.setHospital(hospital); // associate the hospital you just created
+
+
+    doctorservice.saveDoctor(doctor);
+      redirectAttributes.addFlashAttribute("message", "Hospital & Doctor added successfully!");
+
     return "redirect:/admin";
 }
 
