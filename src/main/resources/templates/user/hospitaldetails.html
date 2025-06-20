@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"  th:replace="~{base :: parent(~{::#content},~{::#title},~{::#script})} ">
 <head>
-    <meta charset="UTF-8">
-    <title>Hospital Details</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+     <title id="title">Hospital Details</title>
 </head>
 <body class="bg-gray-100 text-gray-900">
+    <section id="content">
     <div class="max-w-5xl mx-auto py-8 px-4">
         <div class="bg-white p-6 rounded-2xl shadow-lg">
             <h1 class="text-3xl font-bold mb-2" th:text="${hospital.name}">Hospital Name</h1>
@@ -37,5 +36,7 @@
             </div>
         </div>
     </div>
+    </section>
+     <div id="script"></div>
 </body>
 </html>
