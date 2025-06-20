@@ -43,6 +43,10 @@ public class HospitalserviceImpl implements Hospitalservice {
             return Optional.empty();
         }
     }
+@Override
+public Hospital getById(Long id) {
+    return hospitalRepo.findById(id).orElseThrow(() -> new RuntimeException("Hospital not found"));
+}
 
     @Override
     public void deleteHospital(long id) {

@@ -158,22 +158,22 @@ public String adminDashboard(Model model) {
 @PostMapping("/admin/doctor/save")
 public String saveDoctor(@ModelAttribute Doctorform doctorform, RedirectAttributes redirectAttributes) {
 
-    // Fetch existing hospital by name (or ID, ideally)
-    Hospital hospital = hospitalservice.getByName(doctorform.getHospitalname()); 
+    Hospital hospital = hospitalservice.getById(doctorform.getHospitalId());
 
     Doctor doctor = new Doctor();
     doctor.setName(doctorform.getName());
     doctor.setSpecialization(doctorform.getSpecialization());
-    doctor.setHospitalname(hospital.getName());
-    doctor.setHospital(hospital); // set foreign key
-     doctor.setHospitalname(hospital.getName()); // for display
-  
+
+    // Set both for DB link + display
+    doctor.setHospital(hospital);                    // actual relationship
+    doctor.setHospitalname(hospital.getName());      // display purpose
 
     doctorservice.saveDoctor(doctor);
     redirectAttributes.addFlashAttribute("message", "Doctor added successfully!");
 
     return "redirect:/admin";
 }
+
 
 
 @PostMapping("/admin/hospital/save")

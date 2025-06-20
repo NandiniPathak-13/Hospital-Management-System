@@ -97,23 +97,21 @@
             class="absolute top-3 left-3 text-gray-600 hover:text-black text-lg">←</button>
           <h3 class="text-xl font-semibold mb-4 text-center">Add Doctor</h3>
 
-          <form th:action="@{/admin/doctor/save}" th:object="${doctorform}" method="post" class="space-y-4">
-            <input type="text" th:field="*{name}" placeholder="Doctor Name"
-              class="w-full border border-gray-300 rounded px-3 py-2" required />
+          <form th:action="@{/admin/doctor/save}" th:object="${doctorform}" method="post">
+  <input type="text" th:field="*{name}" placeholder="Doctor Name" required />
+  <input type="text" th:field="*{specialization}" placeholder="Specialization" required />
 
-            <input type="text" th:field="*{specialization}" placeholder="Specialization"
-              class="w-full border border-gray-300 rounded px-3 py-2" required />
+  <!-- Dropdown still uses hospitalId -->
+  <select th:field="*{hospitalId}" required>
+    <option value="">-- Select Hospital --</option>
+    <option th:each="hospital : ${hospitals}" 
+            th:value="${hospital.id}" 
+            th:text="${hospital.name}"></option>
+  </select>
 
-            <!-- ✅ Hospital Dropdown -->
-            <select th:field="*{hospitalId}" class="w-full border border-gray-300 rounded px-3 py-2" required>
-              <option value="">-- Select Hospital --</option>
-              <option th:each="hospital : ${hospitals}" th:value="${hospital.id}" th:text="${hospital.name}">City
-                Hospital</option>
-            </select>
+  <button type="submit">Add Doctor</button>
+</form>
 
-            <button type="submit"
-              class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition w-full">Add Doctor</button>
-          </form>
         </div>
       </div>
 
