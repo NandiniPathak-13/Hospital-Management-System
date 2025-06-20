@@ -36,8 +36,11 @@
                 </div>
             </div>
         </div>
+
+        <p th:text="${hospital.id}">Hospital ID</p>
+
     <div class="mt-8">
-  <a th:href="@{'/hospital/' + ${hospital.id} + '/book'}"
+  <a th:href="@{'/user/hospital/' + ${hospital.id} + '/book'}"
      class="inline-block bg-blue-500 text-white hover:bg-blue-400 font-semibold px-6 py-2 rounded-lg shadow transition duration-200">
     Book Appointment
   </a>

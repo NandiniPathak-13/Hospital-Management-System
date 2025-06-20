@@ -166,6 +166,8 @@ public String saveDoctor(@ModelAttribute Doctorform doctorform, RedirectAttribut
     doctor.setSpecialization(doctorform.getSpecialization());
     doctor.setHospitalname(hospital.getName());
     doctor.setHospital(hospital); // set foreign key
+     doctor.setHospitalname(hospital.getName()); // for display
+  
 
     doctorservice.saveDoctor(doctor);
     redirectAttributes.addFlashAttribute("message", "Doctor added successfully!");
