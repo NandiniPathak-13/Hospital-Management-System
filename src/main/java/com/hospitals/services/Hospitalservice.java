@@ -17,7 +17,7 @@ public interface Hospitalservice {
     void deleteHospital(long id);
 
     boolean isHospitalExist(long id);
-
+   Hospital getByName(String name); //
   
 
     List<Hospital> getAllHospitals();

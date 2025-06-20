@@ -149,9 +149,27 @@ public String adminDashboard(Model model) {
 }
 
 
-    @PostMapping("/save-admin")
-public String saveHospital(@ModelAttribute Hospitalform hospitalform,
-        @ModelAttribute Doctorform doctorform, RedirectAttributes redirectAttributes) {
+@PostMapping("/admin/doctor/save")
+public String saveDoctor(@ModelAttribute Doctorform doctorform, RedirectAttributes redirectAttributes) {
+
+    // Fetch existing hospital by name (or ID, ideally)
+    Hospital hospital = hospitalservice.getByName(doctorform.getHospitalname()); 
+
+    Doctor doctor = new Doctor();
+    doctor.setName(doctorform.getName());
+    doctor.setSpecialization(doctorform.getSpecialization());
+    doctor.setHospitalname(hospital.getName());
+    doctor.setHospital(hospital); // set foreign key
+
+    doctorservice.saveDoctor(doctor);
+    redirectAttributes.addFlashAttribute("message", "Doctor added successfully!");
+
+    return "redirect:/admin";
+}
+
+
+@PostMapping("/admin/hospital/save")
+public String saveHospital(@ModelAttribute Hospitalform hospitalform, RedirectAttributes redirectAttributes) {
     Hospital hospital = new Hospital();
     hospital.setName(hospitalform.getName());
     hospital.setCity(hospitalform.getCity());
@@ -164,19 +182,9 @@ public String saveHospital(@ModelAttribute Hospitalform hospitalform,
     hospitalservice.saveHospital(hospital);
     redirectAttributes.addFlashAttribute("message", "Hospital added successfully!");
 
-    Doctor doctor = new Doctor();
-
- doctor.setName(doctorform.getName());
-    doctor.setSpecialization(doctorform.getSpecialization());
-    doctor.setHospitalname(hospital.getName()); // or use from doctorform if needed
-    doctor.setHospital(hospital); // associate the hospital you just created
-
-
-    doctorservice.saveDoctor(doctor);
-      redirectAttributes.addFlashAttribute("message", "Hospital & Doctor added successfully!");
-
     return "redirect:/admin";
 }
+
 
 
 

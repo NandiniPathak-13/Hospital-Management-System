@@ -62,4 +62,10 @@ public class HospitalserviceImpl implements Hospitalservice {
         logger.info("Fetching all hospitals");
         return hospitalRepo.findAll();
     }
+
+    @Override
+    public Hospital getByName(String name) {
+        return hospitalRepo.findByName(name)
+            .orElseThrow(() -> new RuntimeException("Hospital not found with name: " + name));
+   }
 }
