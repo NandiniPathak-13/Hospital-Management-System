@@ -98,22 +98,27 @@ private AppointmentRepo appointmentRepo;
 public String submitAppointment(@ModelAttribute AppointmentForm form, Principal principal, Model model) {
     User user = userservice.getUserByEmail(principal.getName());
     Hospital hospital = hospitalRepository.findById(form.getHospitalId()).orElseThrow();
-    // Doctor doctor = doctor.findById(form.getUserId()).orElseThrow();
+    
+    // 💥 This is the corrected line:
+Doctor selectedDoctor = doctor.findById(form.getDoctorId()).orElseThrow();
+
 
     Appointment appointment = Appointment.builder()
         .user(user)
         .hospital(hospital)
+        .doctor(selectedDoctor)
         .patientName(form.getPatientName())
         .phoneNumber(form.getPhoneNumber())
-        // .details("Appointment on: " + form.getDate())
+        .date(form.getDate())
         .build();
 
     appointmentRepo.save(appointment);
 
     model.addAttribute("appointment", appointment);
     model.addAttribute("hospital", hospital);
-    model.addAttribute("doctor", doctor);
+    model.addAttribute("doctor", selectedDoctor);
     model.addAttribute("confirmed", true);
+
     return "user/appointment";
 }
 

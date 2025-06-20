@@ -18,7 +18,8 @@ public class Hospitalform {
     private String city;
     private String address;
     private String description; // New field for hospital description
-    private String location; // New field for hospital location (coordinates as "lat,long")
+    private String location;
+    private String phonenumber; // New field for hospital location (coordinates as "lat,long")
     private String openingTime;
     private String closingTime;
 }

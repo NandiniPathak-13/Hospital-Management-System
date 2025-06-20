@@ -31,6 +31,7 @@ public class Hospital {
     private String description; // New field for hospital description
     private String location; // New field for hospital location (coordinates as "lat,long")
     private String openingTime;
+    private String phonenumber;
     private String closingTime;
 
     @OneToMany(mappedBy = "hospital")

@@ -2,6 +2,8 @@ package com.hospitals.forms;
 
 
 
+import java.time.LocalDate;
+
 import lombok.*;
 
 @Data
@@ -15,8 +17,8 @@ public class AppointmentForm {
     private String phoneNumber;
 
     private String details;
-
+ private Long doctorId; 
     private Long userId;
-
+private LocalDate date; 
     private Long hospitalId;
 }

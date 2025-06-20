@@ -1,9 +1,7 @@
 package com.hospitals.entities;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import java.time.LocalDate;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,6 +20,7 @@ public class Appointment {
     private String patientName;
     private String phoneNumber;
     private String details;
+    private LocalDate date;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -30,6 +29,10 @@ public class Appointment {
     @ManyToOne
     @JoinColumn(name = "hospital_id")
     private Hospital hospital;
+
+     @ManyToOne
+    @JoinColumn(name = "doctor_id") // ✅ Important
+    private Doctor doctor;
 
     // getters and setters
 }
