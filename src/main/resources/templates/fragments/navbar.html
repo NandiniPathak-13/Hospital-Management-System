@@ -1,12 +1,21 @@
+<div th:fragment="navbar">
+  <nav class="bg-teal-900 text-white fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
+    <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+      <a href="https://flowbite.com/" class="flex items-center space-x-3 rtl:space-x-reverse">
+        <img th:src="@{/chatgpt-logo.png}"
+          class="h-8 w-8 rounded-full border border-white p-1 hover:border-yellow-400 transition duration-300"
+          alt="Flowbite Logo">
+        <span
+          class="self-center text-2xl font-semibold text-white hover:text-yellow-400 transition duration-300">HMS</span>
+        <div class="flex space-x-6">
+          <a th:href="@{/home}" class="text-white hover:text-yellow-400 transition duration-200">Home</a>
+          <a th:href="@{/about}" class="text-white hover:text-yellow-400 transition duration-200">About</a>
+          <a href="#" class="text-white hover:text-yellow-400 transition duration-200">Services</a>
+          <a href="#" class="text-white hover:text-yellow-400 transition duration-200">Contact</a>
+        </div>
+      </a>
 
-  <div th:fragment="navbar" >
-    <nav class="bg-teal-900 text-white fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
-      <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-        <a href="https://flowbite.com/" class="flex items-center space-x-3 rtl:space-x-reverse">
-          <img th:src="@{/chatgpt-logo.png}" class="h-8 w-8 rounded-full border border-white p-1 hover:border-yellow-400 transition duration-300" alt="Flowbite Logo">
-          <span class="self-center text-2xl font-semibold text-white hover:text-yellow-400 transition duration-300">HMS</span>
-        </a>
-         <!-- <div th:if="${currentPath == '/home'}" >
+      <!-- <div th:if="${currentPath == '/home'}" >
           <a href="@{/login}" class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
         <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
           <button type="button"
@@ -18,40 +27,40 @@
 
 
 
-  <div th:if="${page == 'home'}" class="ml-4">
-          <button type="button" data-collapse-toggle="navbar-search" aria-controls="navbar-search" aria-expanded="false"
-            class="md:hidden text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 
+      <div th:if="${page == 'home'}" class="ml-4">
+        <button type="button" data-collapse-toggle="navbar-search" aria-controls="navbar-search" aria-expanded="false"
+          class="md:hidden text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 
             focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 
             rounded-lg text-sm p-2.5 me-1">
 
-            <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-            </svg>
+          <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+          </svg>
 
-            <span class="sr-only">Search</span>
-          </button>
+          <span class="sr-only">Search</span>
+        </button>
+      </div>
+      <!-- SEARCH ICON BUTTON (Only show on Home page, hidden on others) -->
+
+
+      <div th:if="${page == 'home'}" class="ml-4 relative hidden md:block">
+        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+          <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+            fill="none" viewBox="0 0 20 20">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+          </svg>
+          <span class="sr-only">Search icon</span>
         </div>
-  <!-- SEARCH ICON BUTTON (Only show on Home page, hidden on others) -->
-        
-
-        <div th:if="${page == 'home'}" class="ml-4 relative hidden md:block">
-          <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-              fill="none" viewBox="0 0 20 20">
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-            </svg>
-            <span class="sr-only">Search icon</span>
-          </div>
-          <input type="text" id="search-navbar"
-            class="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Search...">
-        </div>
+        <input type="text" id="search-navbar"
+          class="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          placeholder="Search...">
+      </div>
 
 
 
-  <!-- <label class="inline-flex items-center cursor-pointer">
+      <!-- <label class="inline-flex items-center cursor-pointer">
     <input type="checkbox" value="" onchange="toggleTheme()"  class="sr-only peer" id="themeToggleSwitch">
     <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-5 rtl:peer-checked:after:-translate-x-5 peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
     <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300"></span>
@@ -61,64 +70,59 @@
 
 
 
-          <button data-collapse-toggle="navbar-sticky" type="button"
-            class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-            aria-controls="navbar-sticky" aria-expanded="false">
-            <span class="sr-only">Open main menu</span>
-            <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M1 1h15M1 7h15M1 13h15" />
-            </svg>
-          </button>
-        </div>
-          <!-- Right Section: Nav Links -->
-      <div class="flex space-x-6">
-        <a th:href="@{/home}" class="text-white hover:text-yellow-400 transition duration-200">Home</a>
-        <a th:href="@{/about}" class="text-white hover:text-yellow-400 transition duration-200">About</a>
-        <a href="#" class="text-white hover:text-yellow-400 transition duration-200">Services</a>
-        <a href="#" class="text-white hover:text-yellow-400 transition duration-200">Contact</a>
-      </div>
-        <!-- <div th:if="${page == 'home'}" class="ml-4">
+      <button data-collapse-toggle="navbar-sticky" type="button"
+        class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+        aria-controls="navbar-sticky" aria-expanded="false">
+        <span class="sr-only">Open main menu</span>
+        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M1 1h15M1 7h15M1 13h15" />
+        </svg>
+      </button>
+    </div>
+    <!-- Right Section: Nav Links -->
+
+    <!-- <div th:if="${page == 'home'}" class="ml-4">
           <input type="text" placeholder="Search..."
             class="px-2 py-1 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
         </div> -->
 
 
-         <script>
-    // On page load, apply saved theme or system preference
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const savedTheme = localStorage.getItem('theme');
+    <script>
+      // On page load, apply saved theme or system preference
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const savedTheme = localStorage.getItem('theme');
 
-    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
-      document.documentElement.classList.add('dark');
-      document.getElementById('themeToggleSwitch').checked = true;
-    } else {
-      document.documentElement.classList.remove('dark');
-      document.getElementById('themeToggleSwitch').checked = false;
-    }
-
-    // Toggle theme function
-    function toggleTheme() {
-      const html = document.documentElement;
-      const isDark = html.classList.contains('dark');
-      
-      if (isDark) {
-        html.classList.remove('dark');
-        localStorage.setItem('theme', 'light');
+      if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+        document.documentElement.classList.add('dark');
+        document.getElementById('themeToggleSwitch').checked = true;
       } else {
-        html.classList.add('dark');
-        localStorage.setItem('theme', 'dark');
+        document.documentElement.classList.remove('dark');
+        document.getElementById('themeToggleSwitch').checked = false;
       }
-    }
-  </script>
 
-     
+      // Toggle theme function
+      function toggleTheme() {
+        const html = document.documentElement;
+        const isDark = html.classList.contains('dark');
+
+        if (isDark) {
+          html.classList.remove('dark');
+          localStorage.setItem('theme', 'light');
+        } else {
+          html.classList.add('dark');
+          localStorage.setItem('theme', 'dark');
+        }
+      }
+    </script>
 
 
-        
 
-       
 
-      </div>
-    </nav>
-  </div>
+
+
+
+
+</div>
+</nav>
+</div>
