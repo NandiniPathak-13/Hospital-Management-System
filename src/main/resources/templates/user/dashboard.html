@@ -10,21 +10,21 @@
     <section id="content">
         <h1 class="text-5xl text-white font-bold mb-6 text-center">Hospitals List</h1>
 
-        <div class="grid bg-slate-400 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div class="grid bg-slate-800 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             <div th:each="hospital : ${hospitals}"
-                class="bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-100 dark:to-gray-200
+                class="bg-gradient-to-br from-white to-gray-50 dark:from-white dark:to-gray-50
                 bg-gray-100 rounded-2xl p-6 flex flex-col justify-between transition-transform duration-300 hover:scale-[1.02] shadow-[6px_6px_12px_#d1d9e6,-6px_-6px_12px_#ffffff]">
 
                 <div class="flex items-center gap-4 mb-4">
                     <!-- <img src="/hospital-logo.png" alt="Icon" class="w-12 h-12 rounded-full shadow-md" /> -->
                     <div>
-                        <h2 class="text-xl font-bold text-gray-800 dark:text-white" th:text="${hospital.name}">Hospital
+                        <h2 class="text-xl font-bold text-white dark:text-white" th:text="${hospital.name}">Hospital
                             Name</h2>
                         <!-- <p class="text-xs text-blue-500 dark:text-blue-300 italic">#ID <span th:text="${hospital.id}">101</span></p> -->
                     </div>
                 </div>
 
-                <div class="text-sm text-gray-700 dark:text-gray-300 space-y-1">
+                <div class="text-sm text-white dark:text-white space-y-1">
                     <p><i class="fa fa-clock mr-2 text-blue-500"></i>Opening Time: <span
                             th:text="${hospital.openingTime}">9:00 AM</span></p>
                     <p><i class="fa fa-door-closed mr-2 text-red-400"></i>Closing Time: <span
