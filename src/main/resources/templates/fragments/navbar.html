@@ -61,7 +61,7 @@
 
 
 
-          <!-- <button data-collapse-toggle="navbar-sticky" type="button"
+          <button data-collapse-toggle="navbar-sticky" type="button"
             class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
             aria-controls="navbar-sticky" aria-expanded="false">
             <span class="sr-only">Open main menu</span>
@@ -70,8 +70,9 @@
                 d="M1 1h15M1 7h15M1 13h15" />
             </svg>
           </button>
-        </div> -->
-         <div class="flex items-center space-x-8 ml-10">
+        </div>
+          <!-- Right Section: Nav Links -->
+      <div class="flex space-x-6">
         <a th:href="@{/home}" class="text-white hover:text-yellow-400 transition duration-200">Home</a>
         <a th:href="@{/about}" class="text-white hover:text-yellow-400 transition duration-200">About</a>
         <a href="#" class="text-white hover:text-yellow-400 transition duration-200">Services</a>
@@ -83,7 +84,35 @@
         </div> -->
 
 
-        
+         <script>
+    // On page load, apply saved theme or system preference
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const savedTheme = localStorage.getItem('theme');
+
+    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+      document.documentElement.classList.add('dark');
+      document.getElementById('themeToggleSwitch').checked = true;
+    } else {
+      document.documentElement.classList.remove('dark');
+      document.getElementById('themeToggleSwitch').checked = false;
+    }
+
+    // Toggle theme function
+    function toggleTheme() {
+      const html = document.documentElement;
+      const isDark = html.classList.contains('dark');
+      
+      if (isDark) {
+        html.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+      } else {
+        html.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+      }
+    }
+  </script>
+
+     
 
 
         
