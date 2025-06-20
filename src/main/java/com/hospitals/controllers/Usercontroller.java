@@ -74,6 +74,7 @@ public class Usercontroller {
 
         @GetMapping("/hospitals/{id}") // ✅ Fixed URL pattern
     public String showHospitalDetails(@PathVariable Long id, Model model) {
+           model.addAttribute("showNavbar", true);
        
         Hospital hospital = hospitalRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Hospital not found with id: " + id));
@@ -99,6 +100,7 @@ model.addAttribute("doctor", doctor);
             @AuthenticationPrincipal OAuth2User oauthUser) {
         // String name = oauthUser.getAttribute("name");
         // yeh hota hai actual user ka naam!
+        //    model.addAttribute("showNavbar", true);
         String username = Helper.getEmailOfLoggedInUser(authentication);
         logger.info("User loggedin :{}", username);
 
