@@ -10,32 +10,35 @@
     <section id="content">
         <h1 class="text-5xl text-white font-bold mb-6 text-center">Hospitals List</h1>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-    <div th:each="hospital : ${hospitals}"
-         class="bg-gradient-to-br from-blue-100 to-white dark:from-gray-800 dark:to-gray-700 
+        <div class="grid bg-slate-400 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div th:each="hospital : ${hospitals}"
+                class="bg-gradient-to-br from-blue-100 to-white dark:from-gray-800 dark:to-gray-700 
                 rounded-2xl shadow-xl p-6 flex flex-col justify-between hover:scale-105 transition-transform duration-300">
 
-        <div class="flex items-center gap-4 mb-4">
-            <img src="/hospital-logo.png" alt="Icon" class="w-12 h-12 rounded-full shadow-md" />
-            <div>
-                <h2 class="text-xl font-bold text-gray-800 dark:text-white" th:text="${hospital.name}">Hospital Name</h2>
-                <p class="text-xs text-blue-500 dark:text-blue-300 italic">#ID <span th:text="${hospital.id}">101</span></p>
+                <div class="flex items-center gap-4 mb-4">
+                    <!-- <img src="/hospital-logo.png" alt="Icon" class="w-12 h-12 rounded-full shadow-md" /> -->
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-800 dark:text-white" th:text="${hospital.name}">Hospital
+                            Name</h2>
+                        <!-- <p class="text-xs text-blue-500 dark:text-blue-300 italic">#ID <span th:text="${hospital.id}">101</span></p> -->
+                    </div>
+                </div>
+
+                <div class="text-sm text-gray-700 dark:text-gray-300 space-y-1">
+                    <p><i class="fa fa-clock mr-2 text-blue-500"></i>Opening Time: <span
+                            th:text="${hospital.openingTime}">9:00 AM</span></p>
+                    <p><i class="fa fa-door-closed mr-2 text-red-400"></i>Closing Time: <span
+                            th:text="${hospital.closingTime}">5:00 PM</span></p>
+                </div>
+
+                <div class="mt-6 text-right">
+                    <a th:href="@{/user/hospitals/{id}(id=${hospital.id})}"
+                        class="inline-block bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 transition">
+                        View Details
+                    </a>
+                </div>
             </div>
         </div>
-
-        <div class="text-sm text-gray-700 dark:text-gray-300 space-y-1">
-            <p><i class="fa fa-clock mr-2 text-blue-500"></i>Opening Time: <span th:text="${hospital.openingTime}">9:00 AM</span></p>
-            <p><i class="fa fa-door-closed mr-2 text-red-400"></i>Closing Time: <span th:text="${hospital.closingTime}">5:00 PM</span></p>
-        </div>
-
-        <div class="mt-6 text-right">
-            <a th:href="@{/user/hospitals/{id}(id=${hospital.id})}"
-               class="inline-block bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 transition">
-                View Details
-            </a>
-        </div>
-    </div>
-</div>
 
         </div>
     </section>

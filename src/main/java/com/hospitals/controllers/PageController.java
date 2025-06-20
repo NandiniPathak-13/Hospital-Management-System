@@ -19,6 +19,7 @@ import com.hospitals.entities.User;
 import com.hospitals.forms.Doctorform;
 import com.hospitals.forms.Hospitalform;
 import com.hospitals.forms.Userform;
+import com.hospitals.services.AppointmentService;
 import com.hospitals.services.Doctorservice;
 import com.hospitals.services.Hospitalservice;
 import com.hospitals.services.Userservice;
@@ -34,6 +35,8 @@ public class PageController {
 @Autowired
 private Doctorservice doctorservice;
 
+ @Autowired
+private AppointmentService appointmentservice;
 
     @Autowired
     private Userservice userservice;
@@ -144,6 +147,9 @@ public String adminDashboard(Model model) {
     model.addAttribute("hospitals", hospitalservice.getAllHospitals());
     model.addAttribute("doctorform", new Doctorform());
     model.addAttribute("doctor", doctorservice.getAllDoctors());
+    // 🆕 Add these two lines 👇
+    model.addAttribute("users", userservice.getAllUsers());  
+    model.addAttribute("appointments", appointmentservice.getAllAppointments());
 
     return "admin"; // This matches your Thymeleaf template: admin.html
 }

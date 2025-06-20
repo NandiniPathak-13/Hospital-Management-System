@@ -6,6 +6,7 @@
 <body class="bg-gray-100 text-gray-900">
     <section id="content" class="pt-20" >
     <div class="max-w-5xl mx-auto py-8 px-4">
+           <h1 class="text-5xl text-white font-bold mb-6 text-center">Hospital Details</h1>
         <div class="bg-white p-6 rounded-2xl shadow-lg">
             <h1 class="text-4xl font-bold mb-2" th:text="${hospital.name}">Hospital Name</h1>
             <p class="text-gray-700 text-sm italic mb-4" th:text="${hospital.description}">Hospital Description</p>
@@ -36,7 +37,7 @@
             </div>
         </div>
     <div class="mt-8">
-  <a th:href="@{'/appointment/book/' + ${hospital.id}}"
+  <a th:href="@{'/hospital/' + ${hospital.id} + '/book'}"
      class="inline-block bg-blue-500 text-white hover:bg-blue-400 font-semibold px-6 py-2 rounded-lg shadow transition duration-200">
     Book Appointment
   </a>

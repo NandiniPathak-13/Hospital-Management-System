@@ -1,307 +1,81 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hospital Management System ER Diagram</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        .entity {
-            border: 2px solid #3b82f6;
-            border-radius: 0.5rem;
-            background-color: #f8fafc;
-            width: 280px;
-            margin: 1rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-        .entity-header {
-            background-color: #3b82f6;
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem 0.5rem 0 0;
-            font-weight: bold;
-            text-align: center;
-        }
-        .entity-body {
-            padding: 0.75rem;
-        }
-        .attribute {
-            margin: 0.25rem 0;
-            padding: 0.25rem;
-            border-bottom: 1px dashed #e2e8f0;
-            font-size: 0.9rem;
-        }
-        .pk {
-            color: #10b981;
-            font-weight: bold;
-        }
-        .fk {
-            color: #f59e0b;
-            font-style: italic;
-        }
-        .relationship {
-            position: absolute;
-            background-color: white;
-            padding: 0.2rem 0.4rem;
-            border-radius: 50%;
-            border: 1px solid #94a3b8;
-            font-size: 0.7rem;
-            width: 20px;
-            height: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 10;
-        }
-        .connector {
-            position: absolute;
-            background-color: #64748b;
-            height: 2px;
-            transform-origin: 0 0;
-            z-index: 1;
-        }
-        .diagram-container {
-            position: relative;
-            height: 600px;
-            width: 100%;
-            overflow: auto;
-            border: 1px solid #e2e8f0;
-            border-radius: 0.5rem;
-            padding: 1rem;
-            background-color: #f1f5f9;
-        }
-        .controls {
-            margin-bottom: 1rem;
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-        }
-        button {
-            padding: 0.5rem 1rem;
-            background-color: #3b82f6;
-            color: white;
-            border: none;
-            border-radius: 0.25rem;
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
-        button:hover {
-            background-color: #2563eb;
-        }
-        .legend-item {
-            display: flex;
-            align-items: center;
-            margin-right: 1rem;
-        }
-        .legend-color {
-            width: 20px;
-            height: 20px;
-            border-radius: 4px;
-            margin-right: 0.5rem;
-        }
-    </style>
-</head>
-<body class="bg-gray-100 p-4 md:p-8">
-    <div class="max-w-6xl mx-auto bg-white rounded-lg shadow-lg p-4 md:p-6">
-        <h1 class="text-2xl md:text-3xl font-bold text-center mb-4 md:mb-6 text-blue-600">Hospital Management System ER Diagram</h1>
-        
-        <div class="controls mb-4">
-            <button onclick="zoomIn()">Zoom In</button>
-            <button onclick="zoomOut()">Zoom Out</button>
-            <button onclick="resetZoom()">Reset Zoom</button>
-            <button onclick="downloadDiagram()">Download as Image</button>
-        </div>
-        
-        <div class="diagram-container" id="diagram">
-            <!-- Entities will be positioned here by JavaScript -->
-        </div>
-        
-        <div class="mt-4 md:mt-6 p-3 md:p-4 bg-blue-50 rounded-lg">
-            <h2 class="text-lg md:text-xl font-semibold mb-2 text-blue-700">Legend</h2>
-            <div class="flex flex-wrap gap-2 md:gap-4">
-                <div class="legend-item">
-                    <div class="legend-color bg-green-400"></div>
-                    <span>Primary Key (PK)</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color bg-yellow-400"></div>
-                    <span>Foreign Key (FK)</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color bg-white border border-gray-400 flex items-center justify-center">1</div>
-                    <span>One</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color bg-white border border-gray-400 flex items-center justify-center">N</div>
-                    <span>Many</span>
-                </div>
-            </div>
-        </div>
-    </div>
+package com.hospitals.controllers;
 
-    <script>
-        let scale = 1;
-        const diagram = document.getElementById('diagram');
-        
-        function createEntity(name, attributes, x, y) {
-            const entity = document.createElement('div');
-            entity.className = 'entity';
-            entity.style.position = 'absolute';
-            entity.style.left = `${x}px`;
-            entity.style.top = `${y}px`;
-            entity.style.transform = `scale(${scale})`;
-            entity.style.zIndex = '5';
-            
-            let html = `<div class="entity-header">${name}</div><div class="entity-body">`;
-            
-            attributes.forEach(attr => {
-                const isPk = attr.includes('(PK)');
-                const isFk = attr.includes('(FK)');
-                const classNames = [];
-                if (isPk) classNames.push('pk');
-                if (isFk) classNames.push('fk');
-                
-                html += `<div class="attribute ${classNames.join(' ')}">${attr}</div>`;
-            });
-            
-            html += '</div>';
-            entity.innerHTML = html;
-            return entity;
-        }
-        
-        function createRelationship(text, x, y) {
-            const rel = document.createElement('div');
-            rel.className = 'relationship';
-            rel.style.left = `${x}px`;
-            rel.style.top = `${y}px`;
-            rel.style.transform = `scale(${scale})`;
-            rel.textContent = text;
-            return rel;
-        }
-        
-        function createConnector(x1, y1, x2, y2, hasArrow = true) {
-            const connector = document.createElement('div');
-            connector.className = 'connector';
-            
-            const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-            const angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
-            
-            connector.style.width = `${length}px`;
-            connector.style.left = `${x1}px`;
-            connector.style.top = `${y1}px`;
-            connector.style.transform = `rotate(${angle}deg)`;
-            
-            if (hasArrow) {
-                const arrow = document.createElement('div');
-                arrow.style.position = 'absolute';
-                arrow.style.right = '0';
-                arrow.style.top = '-4px';
-                arrow.style.width = '0';
-                arrow.style.height = '0';
-                arrow.style.borderLeft = '6px solid transparent';
-                arrow.style.borderRight = '6px solid transparent';
-                arrow.style.borderTop = '6px solid #64748b';
-                connector.appendChild(arrow);
-            }
-            
-            return connector;
-        }
-        
-        function renderDiagram() {
-            diagram.innerHTML = '';
-            
-            // Create entities with adjusted positions
-            const user = createEntity('User', [
-                'id (PK)',
-                'name',
-                'email',
-                'phoneNumber',
-                'password',
-                'provider',
-                'providerid',
-                'roleList'
-            ], 50, 100);
-            
-            const hospital = createEntity('Hospital', [
-                'id (PK)',
-                'name',
-                'city',
-                'address',
-                'description',
-                'location',
-                'openingTime',
-                'closingTime'
-            ], 400, 100);
-            
-            const doctor = createEntity('Doctor', [
-                'id (PK)',
-                'name',
-                'specialization',
-                'hospitalname',
-                'hospital_id (FK)'
-            ], 400, 350);
-            
-            const appointment = createEntity('Appointment', [
-                'id (PK)',
-                'patientName',
-                'phoneNumber',
-                'details',
-                'user_id (FK)',
-                'hospital_id (FK)'
-            ], 50, 350);
-            
-            diagram.appendChild(user);
-            diagram.appendChild(hospital);
-            diagram.appendChild(doctor);
-            diagram.appendChild(appointment);
-            
-            // Create relationships
-            diagram.appendChild(createRelationship('1', 200, 150));
-            diagram.appendChild(createRelationship('N', 200, 400));
-            diagram.appendChild(createRelationship('1', 350, 225));
-            diagram.appendChild(createRelationship('N', 350, 425));
-            
-            // Create connectors with arrows
-            // User (1) -> (N) Appointment
-            diagram.appendChild(createConnector(280, 150, 200, 150, false));
-            diagram.appendChild(createConnector(200, 150, 200, 400, false));
-            diagram.appendChild(createConnector(200, 400, 50, 400, true));
-            
-            // Hospital (1) -> (N) Doctor
-            diagram.appendChild(createConnector(680, 225, 350, 225, false));
-            diagram.appendChild(createConnector(350, 225, 350, 425, false));
-            diagram.appendChild(createConnector(350, 425, 400, 425, true));
-            
-            // Hospital (1) -> (N) Appointment
-            diagram.appendChild(createConnector(680, 225, 350, 225, false));
-            diagram.appendChild(createConnector(350, 225, 200, 225, false));
-            diagram.appendChild(createConnector(200, 225, 200, 400, false));
-            diagram.appendChild(createConnector(200, 400, 50, 400, true));
-        }
-        
-        function zoomIn() {
-            scale += 0.1;
-            renderDiagram();
-        }
-        
-        function zoomOut() {
-            if (scale > 0.2) {
-                scale -= 0.1;
-                renderDiagram();
-            }
-        }
-        
-        function resetZoom() {
-            scale = 1;
-            renderDiagram();
-        }
-        
-        function downloadDiagram() {
-            alert("To save this diagram as an image:\n1. Right-click on the diagram\n2. Select 'Save Image As...'\n3. Choose a location to save");
-        }
-        
-        // Initial render
-        renderDiagram();
-    </script>
-</body>
-</html>
+import com.hospitals.entities.Appointment;
+import com.hospitals.entities.Doctor;
+import com.hospitals.entities.Hospital;
+import com.hospitals.entities.User;
+import com.hospitals.repositories.AppointmentRepository;
+import com.hospitals.repositories.Doctorrepo;
+import com.hospitals.repositories.HospitalRepo;
+import com.hospitals.repositories.Userrepo;
+import com.hospitals.services.Userservice;
+
+import lombok.RequiredArgsConstructor;
+
+import java.security.Principal;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+@Controller
+@RequestMapping("/user")
+@RequiredArgsConstructor
+public class AppointmentController {
+
+    private final AppointmentRepository appointmentRepository;
+    private final HospitalRepo hospitalRepo;
+    private final Doctorrepo doctorrepo;
+    private final Userservice userservice;
+    private final Userrepo userrepo;
+
+    // 🧾 Step 1: Show Appointment Form
+    @GetMapping("/hospital/{id}/book")
+    public String showAppointmentForm(@PathVariable Long id, Model model, Principal principal) {
+        Hospital hospital = hospitalRepo.findById(id).orElseThrow(() -> new RuntimeException("Hospital not found"));
+
+        String username = principal.getName();
+        User user = userservice.getUserByEmail(username);
+
+        List<Doctor> doctors = doctorrepo.findByHospitalId(id);
+
+        model.addAttribute("showNavbar", true);
+        model.addAttribute("hospital", hospital);
+        model.addAttribute("doctors", doctors);
+        model.addAttribute("user", user);
+        model.addAttribute("appointment", new Appointment());
+        model.addAttribute("notConfirmed", true);
+
+        return "user/appointment"; // Thymeleaf view
+    }
+
+    // 📩 Step 2: Submit Appointment Form
+    @PostMapping("/submit-appointment")
+    public String submitAppointment(@ModelAttribute Appointment appointment,
+                                    @RequestParam("doctorId") Long doctorId,
+                                    Principal principal,
+                                    Model model) {
+        String email = principal.getName();
+        User user = userservice.getUserByEmail(email);
+
+        Hospital hospital = hospitalRepo.findById(appointment.getHospital().getId())
+                                .orElseThrow(() -> new RuntimeException("Hospital not found"));
+        Doctor doctor = doctorrepo.findById(doctorId)
+                                .orElseThrow(() -> new RuntimeException("Doctor not found"));
+
+        // Save appointment
+        appointment.setUser(user);
+        appointment.setHospital(hospital);
+        appointmentRepository.save(appointment);
+
+        model.addAttribute("showNavbar", true);
+        model.addAttribute("appointment", appointment);
+        model.addAttribute("hospital", hospital);
+        model.addAttribute("doctor", doctor);
+        model.addAttribute("confirmed", true);
+
+        return "user/appointment"; // same page shows confirmation receipt
+    }
+}

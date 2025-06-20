@@ -17,9 +17,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.hospitals.entities.Appointment;
+import com.hospitals.entities.Doctor;
 import com.hospitals.entities.Hospital;
 import com.hospitals.entities.User;
+import com.hospitals.forms.AppointmentForm;
 import com.hospitals.helpers.Helper;
+import com.hospitals.repositories.AppointmentRepo;
 import com.hospitals.repositories.Doctorrepo;
 import com.hospitals.repositories.HospitalRepo;
 import com.hospitals.repositories.Userrepo;
@@ -43,6 +47,10 @@ public class Usercontroller {
 
     private Logger logger = LoggerFactory.getLogger(Usercontroller.class);
 
+
+ @Autowired
+private AppointmentRepo appointmentRepo;
+
     @Autowired
     private Userservice userservice;
 
@@ -64,6 +72,54 @@ public class Usercontroller {
 
         return "user/dashboard";
     }
+
+
+ // 🧾 Step 1: Show Appointment Form
+    @GetMapping("/hospital/{id}/book")
+    public String showAppointmentForm(@PathVariable Long id, Model model, Principal principal) {
+        Hospital hospital = hospitalRepository.findById(id).orElseThrow(() -> new RuntimeException("Hospital not found"));
+
+        String username = principal.getName();
+        User user = userservice.getUserByEmail(username);
+
+        List<Doctor> doctors = doctor.findByHospitalId(id);
+
+        model.addAttribute("showNavbar", true);
+        model.addAttribute("hospital", hospital);
+        model.addAttribute("doctors", doctors);
+        model.addAttribute("user", user);
+        model.addAttribute("appointment", new Appointment());
+        model.addAttribute("notConfirmed", true);
+
+        return "user/appointment"; // Thymeleaf view
+    }
+
+@PostMapping("/submit-appointment")
+public String submitAppointment(@ModelAttribute AppointmentForm form, Principal principal, Model model) {
+    User user = userservice.getUserByEmail(principal.getName());
+    Hospital hospital = hospitalRepository.findById(form.getHospitalId()).orElseThrow();
+    // Doctor doctor = doctor.findById(form.getUserId()).orElseThrow();
+
+    Appointment appointment = Appointment.builder()
+        .user(user)
+        .hospital(hospital)
+        .patientName(form.getPatientName())
+        .phoneNumber(form.getPhoneNumber())
+        // .details("Appointment on: " + form.getDate())
+        .build();
+
+    appointmentRepo.save(appointment);
+
+    model.addAttribute("appointment", appointment);
+    model.addAttribute("hospital", hospital);
+    model.addAttribute("doctor", doctor);
+    model.addAttribute("confirmed", true);
+    return "user/appointment";
+}
+
+
+
+
   @PostMapping("/delete/{id}")
     public String deleteHospital(@PathVariable("id") Long id) {
         hospitalService.deleteHospital(id);  

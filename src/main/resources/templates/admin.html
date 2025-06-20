@@ -36,10 +36,33 @@
     <h1 class="text-3xl font-bold text-gray-800 mb-6">Welcome to Hospital Admin Dashboard</h1>
     <p class="text-gray-600 mb-8">Click options on the left sidebar to manage entities.</p>
 
-    <!-- User Section -->
-    <section id="userSection" class="hidden">
-      <h2 class="text-2xl font-semibold mb-4">User Management Coming Soon...</h2>
-    </section>
+   
+     <!-- User Section -->
+<section id="userSection" class="hidden">
+  <h2 class="text-2xl font-semibold mb-4">All Registered Users</h2>
+  <table class="w-full border-collapse border border-gray-300 mb-6">
+    <thead>
+      <tr class="bg-gray-200">
+        <th class="border px-4 py-2">ID</th>
+        <th class="border px-4 py-2">Name</th>
+        <th class="border px-4 py-2">Email</th>
+        <th class="border px-4 py-2">Phone</th>
+        <th class="border px-4 py-2">Role</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr th:each="user : ${users}">
+        <td class="border px-4 py-2" th:text="${user.id}">1</td>
+        <td class="border px-4 py-2" th:text="${user.name}">Shalini</td>
+        <td class="border px-4 py-2" th:text="${user.email}">shalini@example.com</td>
+        <td class="border px-4 py-2" th:text="${user.phoneNumber}">1234567890</td>
+        <td class="border px-4 py-2" th:text="${user.roleList}">USER</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+ 
 
     <!-- Doctor Section -->
     <section id="doctorSection" class="hidden">
@@ -148,17 +171,30 @@
 
 
     <!-- Appointment Section -->
-    <section id="appointmentSection" class="hidden">
-      <h2 class="text-2xl font-semibold mb-4">Appointment Management Coming Soon...</h2>
-      <div class="flex space-x-4 mb-6">
-        <button class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition"
-          onclick="showModal('addDoctorModal')">Show Appointments</button>
-        <button class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition"
-          onclick="showModal('deleteDoctorModal')">Update</button>
-        <button class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition"
-          onclick="showModal('updateDoctorModal')">Update Doctor</button>
-      </div>
-    </section>
+    <!-- Appointment Section -->
+<section id="appointmentSection" class="hidden">
+  <h2 class="text-2xl font-semibold mb-4">All Appointments</h2>
+  <table class="w-full border-collapse border border-gray-300 mb-6">
+    <thead>
+      <tr class="bg-gray-200">
+        <th class="border px-4 py-2">ID</th>
+        <th class="border px-4 py-2">Patient Name</th>
+        <th class="border px-4 py-2">Phone</th>
+        <th class="border px-4 py-2">Hospital</th>
+        <th class="border px-4 py-2">User Email</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr th:each="appointment : ${appointments}">
+        <td class="border px-4 py-2" th:text="${appointment.id}">1</td>
+        <td class="border px-4 py-2" th:text="${appointment.patientName}">Aarohi</td>
+        <td class="border px-4 py-2" th:text="${appointment.phoneNumber}">9876543210</td>
+        <td class="border px-4 py-2" th:text="${appointment.hospital.name}">City Hospital</td>
+        <td class="border px-4 py-2" th:text="${appointment.user.email}">aarohi@gmail.com</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
 
 
 
