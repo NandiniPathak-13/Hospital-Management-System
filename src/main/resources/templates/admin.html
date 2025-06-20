@@ -58,7 +58,7 @@
           <button onclick="closeModal('addDoctorModal')" class="absolute top-3 left-3 text-gray-600 hover:text-gray-900"
             title="Back">← Back</button>
           <h3 class="text-xl font-semibold mb-4">Add Doctor</h3>
-          <form th:action="@{/admin/doctor/add}" method="post" class="space-y-4">
+          <form th:action="@{/save-admin}" th:object="${doctorform}" method="post" class="space-y-4">
             <input type="text" name="name" placeholder="Doctor Name"
               class="w-full border border-gray-300 rounded px-3 py-2" required />
             <input type="text" name="specialization" placeholder="Specialization"

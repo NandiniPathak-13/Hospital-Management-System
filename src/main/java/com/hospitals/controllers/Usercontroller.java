@@ -66,7 +66,9 @@ public class Usercontroller {
     }
   @PostMapping("/delete/{id}")
     public String deleteHospital(@PathVariable("id") Long id) {
-        hospitalService.deleteHospital(id);  // service method
+        hospitalService.deleteHospital(id);  
+        // service method
+        doctorservice.deleteDoctor(id);
         return "redirect:/admin";  // after delete, go back to dashboard
     }
 

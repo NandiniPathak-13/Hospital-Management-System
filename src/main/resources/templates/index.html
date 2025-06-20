@@ -1,51 +1,307 @@
-
-
-<div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
-    <form>
-    <div class="grid gap-6 mb-6 md:grid-cols-2">
-        <div>
-            <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">First name</label>
-            <input type="text" id="first_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="John" required />
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Management System ER Diagram</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .entity {
+            border: 2px solid #3b82f6;
+            border-radius: 0.5rem;
+            background-color: #f8fafc;
+            width: 280px;
+            margin: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .entity-header {
+            background-color: #3b82f6;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem 0.5rem 0 0;
+            font-weight: bold;
+            text-align: center;
+        }
+        .entity-body {
+            padding: 0.75rem;
+        }
+        .attribute {
+            margin: 0.25rem 0;
+            padding: 0.25rem;
+            border-bottom: 1px dashed #e2e8f0;
+            font-size: 0.9rem;
+        }
+        .pk {
+            color: #10b981;
+            font-weight: bold;
+        }
+        .fk {
+            color: #f59e0b;
+            font-style: italic;
+        }
+        .relationship {
+            position: absolute;
+            background-color: white;
+            padding: 0.2rem 0.4rem;
+            border-radius: 50%;
+            border: 1px solid #94a3b8;
+            font-size: 0.7rem;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+        .connector {
+            position: absolute;
+            background-color: #64748b;
+            height: 2px;
+            transform-origin: 0 0;
+            z-index: 1;
+        }
+        .diagram-container {
+            position: relative;
+            height: 600px;
+            width: 100%;
+            overflow: auto;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            background-color: #f1f5f9;
+        }
+        .controls {
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        button {
+            padding: 0.5rem 1rem;
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        button:hover {
+            background-color: #2563eb;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-right: 1rem;
+        }
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 p-4 md:p-8">
+    <div class="max-w-6xl mx-auto bg-white rounded-lg shadow-lg p-4 md:p-6">
+        <h1 class="text-2xl md:text-3xl font-bold text-center mb-4 md:mb-6 text-blue-600">Hospital Management System ER Diagram</h1>
+        
+        <div class="controls mb-4">
+            <button onclick="zoomIn()">Zoom In</button>
+            <button onclick="zoomOut()">Zoom Out</button>
+            <button onclick="resetZoom()">Reset Zoom</button>
+            <button onclick="downloadDiagram()">Download as Image</button>
         </div>
-        <div>
-            <label for="last_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Last name</label>
-            <input type="text" id="last_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Doe" required />
+        
+        <div class="diagram-container" id="diagram">
+            <!-- Entities will be positioned here by JavaScript -->
         </div>
-        <div>
-            <label for="company" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Company</label>
-            <input type="text" id="company" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Flowbite" required />
-        </div>  
-        <div>
-            <label for="phone" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Phone number</label>
-            <input type="tel" id="phone" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="123-45-678" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" required />
-        </div>
-        <div>
-            <label for="website" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Website URL</label>
-            <input type="url" id="website" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="flowbite.com" required />
-        </div>
-        <div>
-            <label for="visitors" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Unique visitors (per month)</label>
-            <input type="number" id="visitors" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" required />
+        
+        <div class="mt-4 md:mt-6 p-3 md:p-4 bg-blue-50 rounded-lg">
+            <h2 class="text-lg md:text-xl font-semibold mb-2 text-blue-700">Legend</h2>
+            <div class="flex flex-wrap gap-2 md:gap-4">
+                <div class="legend-item">
+                    <div class="legend-color bg-green-400"></div>
+                    <span>Primary Key (PK)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color bg-yellow-400"></div>
+                    <span>Foreign Key (FK)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color bg-white border border-gray-400 flex items-center justify-center">1</div>
+                    <span>One</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color bg-white border border-gray-400 flex items-center justify-center">N</div>
+                    <span>Many</span>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="mb-6">
-        <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email address</label>
-        <input type="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="john.doe@company.com" required />
-    </div> 
-    <div class="mb-6">
-        <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
-        <input type="password" id="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="•••••••••" required />
-    </div> 
-    <div class="mb-6">
-        <label for="confirm_password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Confirm password</label>
-        <input type="password" id="confirm_password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="•••••••••" required />
-    </div> 
-    <div class="flex items-start mb-6">
-        <div class="flex items-center h-5">
-        <input id="remember" type="checkbox" value="" class="w-4 h-4 border border-gray-300 rounded-sm bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800" required />
-        </div>
-        <label for="remember" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">I agree with the <a href="#" class="text-blue-600 hover:underline dark:text-blue-500">terms and conditions</a>.</label>
-    </div>
-    <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
-</form>
-</div>
+
+    <script>
+        let scale = 1;
+        const diagram = document.getElementById('diagram');
+        
+        function createEntity(name, attributes, x, y) {
+            const entity = document.createElement('div');
+            entity.className = 'entity';
+            entity.style.position = 'absolute';
+            entity.style.left = `${x}px`;
+            entity.style.top = `${y}px`;
+            entity.style.transform = `scale(${scale})`;
+            entity.style.zIndex = '5';
+            
+            let html = `<div class="entity-header">${name}</div><div class="entity-body">`;
+            
+            attributes.forEach(attr => {
+                const isPk = attr.includes('(PK)');
+                const isFk = attr.includes('(FK)');
+                const classNames = [];
+                if (isPk) classNames.push('pk');
+                if (isFk) classNames.push('fk');
+                
+                html += `<div class="attribute ${classNames.join(' ')}">${attr}</div>`;
+            });
+            
+            html += '</div>';
+            entity.innerHTML = html;
+            return entity;
+        }
+        
+        function createRelationship(text, x, y) {
+            const rel = document.createElement('div');
+            rel.className = 'relationship';
+            rel.style.left = `${x}px`;
+            rel.style.top = `${y}px`;
+            rel.style.transform = `scale(${scale})`;
+            rel.textContent = text;
+            return rel;
+        }
+        
+        function createConnector(x1, y1, x2, y2, hasArrow = true) {
+            const connector = document.createElement('div');
+            connector.className = 'connector';
+            
+            const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+            const angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+            
+            connector.style.width = `${length}px`;
+            connector.style.left = `${x1}px`;
+            connector.style.top = `${y1}px`;
+            connector.style.transform = `rotate(${angle}deg)`;
+            
+            if (hasArrow) {
+                const arrow = document.createElement('div');
+                arrow.style.position = 'absolute';
+                arrow.style.right = '0';
+                arrow.style.top = '-4px';
+                arrow.style.width = '0';
+                arrow.style.height = '0';
+                arrow.style.borderLeft = '6px solid transparent';
+                arrow.style.borderRight = '6px solid transparent';
+                arrow.style.borderTop = '6px solid #64748b';
+                connector.appendChild(arrow);
+            }
+            
+            return connector;
+        }
+        
+        function renderDiagram() {
+            diagram.innerHTML = '';
+            
+            // Create entities with adjusted positions
+            const user = createEntity('User', [
+                'id (PK)',
+                'name',
+                'email',
+                'phoneNumber',
+                'password',
+                'provider',
+                'providerid',
+                'roleList'
+            ], 50, 100);
+            
+            const hospital = createEntity('Hospital', [
+                'id (PK)',
+                'name',
+                'city',
+                'address',
+                'description',
+                'location',
+                'openingTime',
+                'closingTime'
+            ], 400, 100);
+            
+            const doctor = createEntity('Doctor', [
+                'id (PK)',
+                'name',
+                'specialization',
+                'hospitalname',
+                'hospital_id (FK)'
+            ], 400, 350);
+            
+            const appointment = createEntity('Appointment', [
+                'id (PK)',
+                'patientName',
+                'phoneNumber',
+                'details',
+                'user_id (FK)',
+                'hospital_id (FK)'
+            ], 50, 350);
+            
+            diagram.appendChild(user);
+            diagram.appendChild(hospital);
+            diagram.appendChild(doctor);
+            diagram.appendChild(appointment);
+            
+            // Create relationships
+            diagram.appendChild(createRelationship('1', 200, 150));
+            diagram.appendChild(createRelationship('N', 200, 400));
+            diagram.appendChild(createRelationship('1', 350, 225));
+            diagram.appendChild(createRelationship('N', 350, 425));
+            
+            // Create connectors with arrows
+            // User (1) -> (N) Appointment
+            diagram.appendChild(createConnector(280, 150, 200, 150, false));
+            diagram.appendChild(createConnector(200, 150, 200, 400, false));
+            diagram.appendChild(createConnector(200, 400, 50, 400, true));
+            
+            // Hospital (1) -> (N) Doctor
+            diagram.appendChild(createConnector(680, 225, 350, 225, false));
+            diagram.appendChild(createConnector(350, 225, 350, 425, false));
+            diagram.appendChild(createConnector(350, 425, 400, 425, true));
+            
+            // Hospital (1) -> (N) Appointment
+            diagram.appendChild(createConnector(680, 225, 350, 225, false));
+            diagram.appendChild(createConnector(350, 225, 200, 225, false));
+            diagram.appendChild(createConnector(200, 225, 200, 400, false));
+            diagram.appendChild(createConnector(200, 400, 50, 400, true));
+        }
+        
+        function zoomIn() {
+            scale += 0.1;
+            renderDiagram();
+        }
+        
+        function zoomOut() {
+            if (scale > 0.2) {
+                scale -= 0.1;
+                renderDiagram();
+            }
+        }
+        
+        function resetZoom() {
+            scale = 1;
+            renderDiagram();
+        }
+        
+        function downloadDiagram() {
+            alert("To save this diagram as an image:\n1. Right-click on the diagram\n2. Select 'Save Image As...'\n3. Choose a location to save");
+        }
+        
+        // Initial render
+        renderDiagram();
+    </script>
+</body>
+</html>
