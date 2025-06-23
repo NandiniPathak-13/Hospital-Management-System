@@ -38,47 +38,43 @@ import jakarta.servlet.http.HttpServletRequest;
 
 public class Usercontroller {
 
-@Autowired
- private Doctorrepo doctor; 
+    @Autowired
+    private Doctorrepo doctor;
 
- @Autowired
- private Doctorservice doctorservice;
+    @Autowired
+    private Doctorservice doctorservice;
 
     @Autowired
     private Userrepo userRepository;
 
     private Logger logger = LoggerFactory.getLogger(Usercontroller.class);
 
-
- @Autowired
-private AppointmentRepo appointmentRepo;
+    @Autowired
+    private AppointmentRepo appointmentRepo;
 
     @Autowired
     private Userservice userservice;
 
-
     @Autowired
     private Hospitalservice hospitalService;
 
-@Autowired
+    @Autowired
     private HospitalRepo hospitalRepository;
 
- @ModelAttribute
-public void addLoggedInUserToModel(Model model, Principal principal, HttpServletRequest request) {
-    String path = request.getRequestURI();
+    @ModelAttribute
+    public void addLoggedInUserToModel(Model model, Principal principal, HttpServletRequest request) {
+        String path = request.getRequestURI();
 
-   if (path.startsWith("/login") || path.startsWith("/register")) {
-        User guest = new User();
-        guest.setName("Guest");
-        guest.setEmail("guest@example.com");
-        model.addAttribute("LoggedInUser", guest);
-    } else if (principal != null) {
-        User user = userservice.getUserByEmail(principal.getName());
-        model.addAttribute("LoggedInUser", user);
+        if (path.startsWith("/login") || path.startsWith("/register")) {
+            User guest = new User();
+            guest.setName("Guest");
+            guest.setEmail("guest@example.com");
+            model.addAttribute("LoggedInUser", guest);
+        } else if (principal != null) {
+            User user = userservice.getUserByEmail(principal.getName());
+            model.addAttribute("LoggedInUser", user);
+        }
     }
-}
-
-
 
     @RequestMapping("/dashboard")
     public String dashboard(Model model) {
@@ -86,84 +82,84 @@ public void addLoggedInUserToModel(Model model, Principal principal, HttpServlet
         model.addAttribute("showNavbar", true);
         List<Hospital> hospitals = hospitalService.getAllHospitals();
         model.addAttribute("hospitals", hospitals);
-           
 
         return "user/dashboard";
     }
-@GetMapping("/hospital/{id}/book")
-public String showAppointmentForm(@PathVariable Long id, Model model, Principal principal) {
-    Hospital hospital = hospitalRepository.findById(id)
-        .orElseThrow(() -> new RuntimeException("Hospital not found"));
 
-    String username = principal.getName();
-    User user = userservice.getUserByEmail(username);
+    @GetMapping("/hospital/{id}/book")
+    public String showAppointmentForm(@PathVariable Long id, Model model, Principal principal) {
+        Hospital hospital = hospitalRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Hospital not found"));
 
-    List<Doctor> doctors = doctor.findByHospitalId(id);
+        String username = principal.getName();
+        User user = userservice.getUserByEmail(username);
 
-    model.addAttribute("showNavbar", true);
-    model.addAttribute("hospital", hospital);
-    model.addAttribute("doctors", doctors);
-    model.addAttribute("user", user);
+        List<Doctor> doctors = doctor.findByHospitalId(id);
 
-    // ✅ Correct form object passed
-    model.addAttribute("appointmentform", new AppointmentForm());
+        model.addAttribute("showNavbar", true);
+        model.addAttribute("hospital", hospital);
+        model.addAttribute("doctors", doctors);
+        model.addAttribute("user", user);
 
-    model.addAttribute("notConfirmed", true);
+        // ✅ Correct form object passed
+        model.addAttribute("appointmentform", new AppointmentForm());
+        // model.addAttribute("appointmentform", new AppointmentForm());
+        model.addAttribute("notConfirmed", true);
 
-    return "user/appointment";
-}
-
-@PostMapping("/submit-appointment")
-public String submitAppointment(@ModelAttribute("appointmentform") AppointmentForm form,
-                                Principal principal,
-                                Model model) {
-    User user = userservice.getUserByEmail(principal.getName());
-    Hospital hospital = hospitalRepository.findById(form.getHospitalId())
-        .orElseThrow(() -> new RuntimeException("Hospital not found"));
-    Doctor selectedDoctor = doctor.findById(form.getDoctorId())
-        .orElseThrow(() -> new RuntimeException("Doctor not found"));
-
-    Appointment appointment = Appointment.builder()
-        .user(user)
-        .hospital(hospital)
-        .doctor(selectedDoctor)
-        .patientName(form.getPatientName())
-        .phoneNumber(form.getPhoneNumber())
-        .date(form.getDate())
-        .build();
-
-    appointmentRepo.save(appointment);
-
-    model.addAttribute("appointment", appointment);
-    model.addAttribute("hospital", hospital);
-    model.addAttribute("doctor", selectedDoctor);
-    model.addAttribute("confirmed", true);
-
-    return "user/appointment";
-}
-
-  @PostMapping("/delete/{id}")
-    public String deleteHospital(@PathVariable("id") Long id) {
-        hospitalService.deleteHospital(id);  
-        // service method
-        doctorservice.deleteDoctor(id);
-        return "redirect:/admin";  // after delete, go back to dashboard
+        return "user/appointment";
     }
 
-        @GetMapping("/hospitals/{id}") // ✅ Fixed URL pattern
+    @PostMapping("/submit-appointment")
+    public String submitAppointment(@ModelAttribute("appointmentform") AppointmentForm form,
+            Principal principal,
+            Model model) {
+        User user = userservice.getUserByEmail(principal.getName());
+        Hospital hospital = hospitalRepository.findById(form.getHospitalId())
+                .orElseThrow(() -> new RuntimeException("Hospital not found"));
+        Doctor selectedDoctor = doctor.findById(form.getDoctorId())
+                .orElseThrow(() -> new RuntimeException("Doctor not found"));
+
+        Appointment appointment = Appointment.builder()
+                .user(user)
+                .hospital(hospital)
+                .doctor(selectedDoctor)
+                .patientName(form.getPatientName())
+                .phoneNumber(form.getPhoneNumber())
+                .date(form.getDate())
+                .build();
+
+        appointmentRepo.save(appointment);
+
+        // ✅ Sab cheeze model me dobara daalni hai
+        model.addAttribute("appointment", appointment);
+        model.addAttribute("appointmentform", new AppointmentForm()); // Fresh object bhejna
+        model.addAttribute("hospital", hospital);
+        model.addAttribute("doctor", selectedDoctor);
+        model.addAttribute("confirmed", true);
+
+        return "user/appointment";
+    }
+
+    @PostMapping("/delete/{id}")
+    public String deleteHospital(@PathVariable("id") Long id) {
+        hospitalService.deleteHospital(id);
+        // service method
+        doctorservice.deleteDoctor(id);
+        return "redirect:/admin"; // after delete, go back to dashboard
+    }
+
+    @GetMapping("/hospitals/{id}") // ✅ Fixed URL pattern
     public String showHospitalDetails(@PathVariable Long id, Model model) {
-           model.addAttribute("showNavbar", true);
-       
+        model.addAttribute("showNavbar", true);
+
         Hospital hospital = hospitalRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Hospital not found with id: " + id));
         model.addAttribute("hospital", hospital);
-          model.addAttribute("showNavbar", true);
-model.addAttribute("doctor", doctor);
+        model.addAttribute("showNavbar", true);
+        model.addAttribute("doctor", doctor);
 
-        
         return "user/hospitaldetails"; // Make sure this file exists in templates!
     }
-
 
     // @RequestMapping("/profile")
     // public String userproofile(Model model, Principal principal) {
@@ -178,7 +174,7 @@ model.addAttribute("doctor", doctor);
             @AuthenticationPrincipal OAuth2User oauthUser) {
         // String name = oauthUser.getAttribute("name");
         // yeh hota hai actual user ka naam!
-        //    model.addAttribute("showNavbar", true);
+        // model.addAttribute("showNavbar", true);
         String username = Helper.getEmailOfLoggedInUser(authentication);
         logger.info("User loggedin :{}", username);
 
@@ -191,30 +187,28 @@ model.addAttribute("doctor", doctor);
         return "user/profile";
     }
 
+    @PostMapping("/update-profile")
+    public String updateProfile(@ModelAttribute User updatedUser, Principal principal) {
+        // 1. Get logged in user's current info by username/email
+        String username = principal.getName();
+        User currentUser = userservice.getUserByEmail(username);
 
+        // 2. Update current user details with submitted form data
+        currentUser.setName(updatedUser.getName());
+        currentUser.setEmail(updatedUser.getEmail());
 
+        // 3. Password update - only if new password provided
+        // if (updatedUser.getPassword() != null &&
+        // !updatedUser.getPassword().isEmpty()) {
+        // String encodedPassword = passwordEncoder.encode(updatedUser.getPassword());
+        // currentUser.setPassword(encodedPassword);
+        // }
 
-@PostMapping("/update-profile")
-public String updateProfile(@ModelAttribute User updatedUser, Principal principal) {
-    // 1. Get logged in user's current info by username/email
-    String username = principal.getName();
-    User currentUser = userservice.getUserByEmail(username);
+        // 4. Save updated user to DB
+        userservice.saveUser(currentUser);
 
-    // 2. Update current user details with submitted form data
-    currentUser.setName(updatedUser.getName());
-    currentUser.setEmail(updatedUser.getEmail());
+        // 5. Redirect back to profile page (or success page)
+        return "redirect:/user/profile";
+    }
 
-    // 3. Password update - only if new password provided
-    // if (updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()) {
-    //     String encodedPassword = passwordEncoder.encode(updatedUser.getPassword());
-    //     currentUser.setPassword(encodedPassword);
-    // }
-
-    // 4. Save updated user to DB
-    userservice.saveUser(currentUser);
-
-    // 5. Redirect back to profile page (or success page)
-    return "redirect:/user/profile";
 }
-
-}  
