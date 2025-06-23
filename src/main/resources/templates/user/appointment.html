@@ -89,16 +89,24 @@
 
   <!-- Optional Script for Download -->
   <script>
-    function downloadReceipt() {
-      const receiptContent = document.querySelector('[th\\:if="${confirmed}"]').innerText;
-      const blob = new Blob([receiptContent], { type: 'text/plain' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = "appointment_receipt.txt";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
+    document.addEventListener("DOMContentLoaded", function() {
+      function downloadReceipt() {
+        const receiptContent = document.querySelector('[th\\:if="${confirmed}"]').innerText;
+        const blob = new Blob([receiptContent], { type: 'text/plain' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = "appointment_receipt.txt";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+
+      // Attach the download function to the button
+      const downloadButton = document.querySelector('button[onclick="downloadReceipt()"]');
+      if (downloadButton) {
+        downloadButton.addEventListener('click', downloadReceipt);
+      }
+    });
   </script>
 
   <div id="script"></div>
