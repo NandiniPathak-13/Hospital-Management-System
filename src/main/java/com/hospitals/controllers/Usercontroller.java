@@ -90,36 +90,38 @@ public void addLoggedInUserToModel(Model model, Principal principal, HttpServlet
 
         return "user/dashboard";
     }
+@GetMapping("/hospital/{id}/book")
+public String showAppointmentForm(@PathVariable Long id, Model model, Principal principal) {
+    Hospital hospital = hospitalRepository.findById(id)
+        .orElseThrow(() -> new RuntimeException("Hospital not found"));
 
+    String username = principal.getName();
+    User user = userservice.getUserByEmail(username);
 
- // 🧾 Step 1: Show Appointment Form
-    @GetMapping("/hospital/{id}/book")
-    public String showAppointmentForm(@PathVariable Long id, Model model, Principal principal) {
-        Hospital hospital = hospitalRepository.findById(id).orElseThrow(() -> new RuntimeException("Hospital not found"));
+    List<Doctor> doctors = doctor.findByHospitalId(id);
 
-        String username = principal.getName();
-        User user = userservice.getUserByEmail(username);
+    model.addAttribute("showNavbar", true);
+    model.addAttribute("hospital", hospital);
+    model.addAttribute("doctors", doctors);
+    model.addAttribute("user", user);
 
-        List<Doctor> doctors = doctor.findByHospitalId(id);
+    // ✅ Correct form object passed
+    model.addAttribute("appointmentform", new AppointmentForm());
 
-        model.addAttribute("showNavbar", true);
-        model.addAttribute("hospital", hospital);
-        model.addAttribute("doctors", doctors);
-        model.addAttribute("user", user);
-        model.addAttribute("appointment", new Appointment());
-        model.addAttribute("notConfirmed", true);
+    model.addAttribute("notConfirmed", true);
 
-        return "user/appointment"; // Thymeleaf view
-    }
+    return "user/appointment";
+}
 
 @PostMapping("/submit-appointment")
-public String submitAppointment(@ModelAttribute AppointmentForm form, Principal principal, Model model) {
+public String submitAppointment(@ModelAttribute("appointmentform") AppointmentForm form,
+                                Principal principal,
+                                Model model) {
     User user = userservice.getUserByEmail(principal.getName());
-    Hospital hospital = hospitalRepository.findById(form.getHospitalId()).orElseThrow();
-    
-    // 💥 This is the corrected line:
-Doctor selectedDoctor = doctor.findById(form.getDoctorId()).orElseThrow();
-
+    Hospital hospital = hospitalRepository.findById(form.getHospitalId())
+        .orElseThrow(() -> new RuntimeException("Hospital not found"));
+    Doctor selectedDoctor = doctor.findById(form.getDoctorId())
+        .orElseThrow(() -> new RuntimeException("Doctor not found"));
 
     Appointment appointment = Appointment.builder()
         .user(user)
@@ -139,9 +141,6 @@ Doctor selectedDoctor = doctor.findById(form.getDoctorId()).orElseThrow();
 
     return "user/appointment";
 }
-
-
-
 
   @PostMapping("/delete/{id}")
     public String deleteHospital(@PathVariable("id") Long id) {

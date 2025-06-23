@@ -14,38 +14,39 @@
         <h2 class="text-2xl font-bold text-blue-900 mb-4">Book Appointment at <span th:text="${hospital.name}">Hospital
             Name</span></h2>
 
-        <form th:action="@{/submit-appointment}" th:object="${appointment}" method="post" class="space-y-4">
-          <input type="hidden" name="hospitalId" th:value="${hospital.id}" />
+        <form th:action="@{/submit-appointment}" th:object="${appointmentform}" method="post" class="space-y-4">
+          <input type="hidden"  th:value="${hospital.id}" />
 
           <div>
             <label class="block text-sm font-medium text-blue-800 mb-1">Patient Name</label>
-            <input th:field="*{patientName}" type="text" name="patientName" required
+            <input th:field="*{patientName}" type="text"  required
               class="w-full p-2 border border-blue-300 rounded-md focus:ring focus:ring-blue-400">
           </div>
 
           <div>
             <label class="block text-sm font-medium text-blue-800 mb-1">Phone Number</label>
-            <input th:field="*{phoneNumber}" type="text" name="phoneNumber" required
+            <input th:field="*{phoneNumber}" type="text"  required
               class="w-full p-2 border border-blue-300 rounded-md focus:ring focus:ring-blue-400">
           </div>
 
           <div>
             <label class="block text-sm font-medium text-blue-800 mb-1">Date</label>
-            <input th:field="*{date}" type="date" name="date" required
+            <input th:field="*{date}" type="date" required
               class="w-full p-2 border border-blue-300 rounded-md focus:ring focus:ring-blue-400">
           </div>
 
           <div>
             <label class="block text-sm font-medium text-blue-800 mb-1">Select Doctor</label>
-            <select name="doctorId" th:field="*{doctorId}" required
+            <select  th:field="*{doctorId}" required
               class="w-full p-2 border border-blue-300 rounded-md focus:ring focus:ring-blue-400">
               <option value="">-- Choose Doctor --</option>
               <option th:each="doctor : ${doctors}" th:value="${doctor.id}" th:text="${doctor.name}">Dr. Name</option>
             </select>
           </div>
 
-          <button type="submit" class="bg-blue-800 text-white px-6 py-2 rounded-md hover:bg-blue-900 transition">Confirm
-            Appointment</button>
+          <button type="submit"
+    class="bg-blue-800 text-white px-6 py-2 rounded-md hover:bg-blue-900 transition">Confirm
+    Appointment</button>
         </form>
         <div th:if="${#fields.hasErrors()}">
    <p th:each="err : ${#fields.errors('*')}" th:text="${err}">Error here</p>
