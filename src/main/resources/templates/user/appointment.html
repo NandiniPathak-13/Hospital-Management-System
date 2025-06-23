@@ -15,7 +15,7 @@
             Name</span></h2>
 
         <form th:action="@{/submit-appointment}" th:object="${appointmentform}" method="post" class="space-y-4">
-          <input type="hidden"  th:value="${hospital.id}" />
+          <input type="hidden"  name="hospitalId" th:value="${hospital.id}" />
 
           <div>
             <label class="block text-sm font-medium text-blue-800 mb-1">Patient Name</label>
