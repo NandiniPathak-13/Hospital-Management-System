@@ -1,52 +1,60 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"  th:replace="~{base :: parent(~{::#content},~{::#title},~{::#script})} ">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+    th:replace="~{base :: parent(~{::#content},~{::#title},~{::#script})} ">
+
 <head>
-     <title id="title">Hospital Details</title>
+    <title id="title">Hospital Details</title>
 </head>
+
 <body class="bg-gray-100 text-gray-900">
-    <section id="content" class="pt-20" >
-    <div class="max-w-5xl mx-auto py-8 px-4">
-           <h1 class="text-5xl text-white font-bold mb-6 text-center">Hospital Details</h1>
-        <div class="bg-white p-6 rounded-2xl shadow-lg">
-            <h1 class="text-4xl font-bold mb-2" th:text="${hospital.name}">Hospital Name</h1>
-            <p class="text-gray-700 text-sm italic mb-4" th:text="${hospital.description}">Hospital Description</p>
+    <section id="content">
+        <div class="max-w-5xl mx-auto py-8 px-4">
+            <h1 class="text-5xl text-white font-bold mb-6 text-center">Hospital Details</h1>
+            <div class="bg-white p-6 rounded-2xl shadow-lg">
+                <h1 class="text-4xl font-bold mb-2" th:text="${hospital.name}">Hospital Name</h1>
+                <p class="text-gray-700 text-sm italic mb-4" th:text="${hospital.description}">Hospital Description</p>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <p><strong>City:</strong> <span th:text="${hospital.city}">City</span></p>
-                    <p><strong>Address:</strong> <span th:text="${hospital.address}">Address</span></p>
-                    <p><strong>Location:</strong> <span th:text="${hospital.location}">Lat,Long</span></p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <p><strong>City:</strong> <span th:text="${hospital.city}">City</span></p>
+                        <p><strong>Address:</strong> <span th:text="${hospital.address}">Address</span></p>
+                        <!-- Get Directions Button -->
+                        <a th:href="'https://www.google.com/maps?q=' + ${hospital.location}" target="_blank"
+                            class="inline-block bg-green-600 text-white hover:bg-green-500 font-semibold px-6 py-2 rounded-lg shadow transition duration-200">
+                            Get Directions
+                        </a>
+                    </div>
+                    <div>
+                        <p><strong>Opening Time:</strong> <span th:text="${hospital.openingTime}">9:00 AM</span></p>
+                        <p><strong>Closing Time:</strong> <span th:text="${hospital.closingTime}">5:00 PM</span></p>
+                    </div>
                 </div>
-                <div>
-                    <p><strong>Opening Time:</strong> <span th:text="${hospital.openingTime}">9:00 AM</span></p>
-                    <p><strong>Closing Time:</strong> <span th:text="${hospital.closingTime}">5:00 PM</span></p>
-                </div>
-            </div>
 
-            <div class="mt-8">
-                <h2 class="text-2xl font-semibold mb-4">Doctors</h2>
-                 <div th:if="${#lists.isEmpty(hospital.doctors)}">
-        <p class="text-gray-500">No doctors available for this hospital.</p>
-    </div>
-                <div class="space-y-4">
-                    <div th:each="doctor : ${hospital.doctors}" class="p-4 bg-gray-50 rounded-lg border">
-                        <p class="text-lg font-medium" th:text="${doctor.name}">Dr. Name</p>
-                        <p class="text-sm text-gray-600" th:text="${doctor.specialization}">Specialization</p>
+                <div class="mt-8">
+                    <h2 class="text-2xl font-semibold mb-4">Doctors</h2>
+                    <div th:if="${#lists.isEmpty(hospital.doctors)}">
+                        <p class="text-gray-500">No doctors available for this hospital.</p>
+                    </div>
+                    <div class="space-y-4">
+                        <div th:each="doctor : ${hospital.doctors}" class="p-4 bg-gray-50 rounded-lg border">
+                            <p class="text-lg font-medium" th:text="${doctor.name}">Dr. Name</p>
+                            <p class="text-sm text-gray-600" th:text="${doctor.specialization}">Specialization</p>
+                        </div>
                     </div>
                 </div>
             </div>
+
+
+            <div class="mt-8">
+                <a th:href="@{'/user/hospital/' + ${hospital.id} + '/book'}"
+                    class="inline-block bg-blue-500 text-white hover:bg-blue-400 font-semibold px-6 py-2 rounded-lg shadow transition duration-200">
+                    Book Appointment
+                </a>
+            </div>
         </div>
 
-        <p th:text="${hospital.id}">Hospital ID</p>
-
-    <div class="mt-8">
-  <a th:href="@{'/user/hospital/' + ${hospital.id} + '/book'}"
-     class="inline-block bg-blue-500 text-white hover:bg-blue-400 font-semibold px-6 py-2 rounded-lg shadow transition duration-200">
-    Book Appointment
-  </a>
-</div></div>
-
     </section>
-     <div id="script"></div>
+    <div id="script"></div>
 </body>
+
 </html>

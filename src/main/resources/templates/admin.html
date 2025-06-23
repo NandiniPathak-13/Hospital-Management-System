@@ -84,47 +84,33 @@
       </div>
 
       <!-- Add Doctor Modal -->
-      <div id="addDoctorModal"
-        class="fixed inset-0 hidden modal-overlay z-50 flex justify-center items-center transition-opacity duration-300">
-
-        <!-- Modal Background Overlay -->
-        <div class="absolute inset-0 bg-black opacity-50" onclick="closeModal('addDoctorModal')"></div>
-
-        <!-- Modal Content -->
+      <div id="addDoctorModal" class="fixed inset-0 hidden modal-overlay z-50 flex items-center justify-center">
         <div
-          class="relative bg-white rounded-2xl shadow-2xl w-[90%] max-w-md p-6 z-50 overflow-y-auto max-h-[90vh] transform transition-transform scale-100">
+          class="bg-white rounded-xl shadow-2xl w-[95%] max-w-xl p-8 relative transform transition-transform scale-100">
           <button onclick="closeModal('addDoctorModal')"
-            class="absolute top-3 left-3 text-gray-600 hover:text-black text-lg">←</button>
-          <h3 class="text-xl font-semibold mb-4 text-center">Add Doctor</h3>
-
-          <form th:action="@{/admin/doctor/save}" th:object="${doctorform}" method="post">
-  <input type="text" th:field="*{name}" placeholder="Doctor Name" required />
-  <input type="text" th:field="*{specialization}" placeholder="Specialization" required />
-
-  <!-- Dropdown still uses hospitalId -->
-  <select th:field="*{hospitalId}" required>
-    <option value="">-- Select Hospital --</option>
-    <option th:each="hospital : ${hospitals}" 
-            th:value="${hospital.id}" 
-            th:text="${hospital.name}"></option>
-  </select>
-
-  <button type="submit">Add Doctor</button>
-</form>
-
+            class="absolute top-4 right-4 text-gray-600 hover:text-black text-2xl">&times;</button>
+          <h3 class="text-2xl font-bold mb-6 text-center text-blue-800">Add Doctor</h3>
+          <form th:action="@{/admin/doctor/save}" th:object="${doctorform}" method="post" class="space-y-4">
+            <input type="text" th:field="*{name}" placeholder="Doctor Name"
+              class="w-full border border-gray-300 rounded px-4 py-2" required />
+            <input type="text" th:field="*{specialization}" placeholder="Specialization"
+              class="w-full border border-gray-300 rounded px-4 py-2" required />
+            <select th:field="*{hospitalId}" class="w-full border border-gray-300 rounded px-4 py-2" required>
+              <option value="">-- Select Hospital --</option>
+              <option th:each="hospital : ${hospitals}" th:value="${hospital.id}" th:text="${hospital.name}"></option>
+            </select>
+            <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition">Add
+              Doctor</button>
+          </form>
         </div>
       </div>
 
-      </div>
-      </div>
-
       <!-- Delete Doctor Modal -->
-      <div id="deleteDoctorModal"
-        class="absolute inset-0 hidden modal-overlay z-50 flex justify-center items-start pt-20">
-        <div class="bg-white rounded-lg shadow-xl w-3/4 max-w-4xl p-6 relative overflow-auto max-h-[80vh]">
+      <div id="deleteDoctorModal" class="fixed inset-0 hidden modal-overlay z-50 flex items-center justify-center">
+        <div class="bg-white rounded-xl shadow-2xl w-[95%] max-w-4xl p-8 relative overflow-auto max-h-[90vh]">
           <button onclick="closeModal('deleteDoctorModal')"
-            class="absolute top-3 left-3 text-gray-600 hover:text-gray-900">← Back</button>
-          <h3 class="text-xl font-semibold mb-4">Delete Doctor</h3>
+            class="absolute top-4 right-4 text-gray-600 hover:text-black text-2xl">&times;</button>
+          <h3 class="text-2xl font-bold mb-6 text-red-700 text-center">Delete Doctor</h3>
           <table class="w-full border-collapse border border-gray-300">
             <thead>
               <tr class="bg-gray-200">
@@ -134,7 +120,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr th:each="doctor : ${doctors}">
+              <tr th:each="doctor : ${doctor}">
                 <td class="border px-4 py-2" th:text="${doctor.id}">1</td>
                 <td class="border px-4 py-2" th:text="${doctor.name}">Dr. Ahuja</td>
                 <td class="border px-4 py-2">
@@ -151,12 +137,11 @@
       </div>
 
       <!-- Update Doctor Modal -->
-      <div id="updateDoctorModal"
-        class="absolute inset-0 hidden modal-overlay z-50 flex justify-center items-start pt-20">
-        <div class="bg-white rounded-lg shadow-xl w-3/4 max-w-4xl p-6 relative overflow-auto max-h-[80vh]">
+      <div id="updateDoctorModal" class="fixed inset-0 hidden modal-overlay z-50 flex items-center justify-center">
+        <div class="bg-white rounded-xl shadow-2xl w-[95%] max-w-4xl p-8 relative overflow-auto max-h-[90vh]">
           <button onclick="closeModal('updateDoctorModal')"
-            class="absolute top-3 left-3 text-gray-600 hover:text-gray-900">← Back</button>
-          <h3 class="text-xl font-semibold mb-4">Update Doctor</h3>
+            class="absolute top-4 right-4 text-gray-600 hover:text-black text-2xl">&times;</button>
+          <h3 class="text-2xl font-bold mb-6 text-yellow-700 text-center">Update Doctor</h3>
           <table class="w-full border-collapse border border-gray-300 mb-6">
             <thead>
               <tr class="bg-gray-200">
@@ -209,7 +194,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr th:each="appointment : ${appointments}">
+          <tr th:each="appointment : ${appointment}">
             <td class="border px-4 py-2" th:text="${appointment.id}">1</td>
             <td class="border px-4 py-2" th:text="${appointment.patientName}">Aarohi</td>
             <td class="border px-4 py-2" th:text="${appointment.phoneNumber}">9876543210</td>
@@ -236,11 +221,13 @@
 
       <!-- Add Hospital Modal -->
       <div id="addHospitalModal"
-        class="absolute inset-0 hidden modal-overlay z-50 flex justify-center items-start pt-20">
-        <div class="bg-white rounded-lg shadow-xl w-96 max-w-full p-6 relative">
+        class="fixed inset-0 hidden modal-overlay z-50 flex justify-center items-center transition-opacity duration-300">
+        <div class="absolute inset-0 bg-black opacity-50" onclick="closeModal('addHospitalModal')"></div>
+        <div
+          class="relative bg-white rounded-2xl shadow-2xl w-[90%] max-w-lg p-6 z-50 overflow-y-auto max-h-[90vh] transform transition-transform scale-100">
           <button onclick="closeModal('addHospitalModal')"
-            class="absolute top-3 left-3 text-gray-600 hover:text-gray-900" title="Back">← Back</button>
-          <h3 class="text-xl font-semibold mb-4">Add Hospital</h3>
+            class="absolute top-3 left-3 text-gray-600 hover:text-black text-lg">←</button>
+          <h3 class="text-xl font-semibold mb-4 text-center">Add Hospital</h3>
           <form th:action="@{/admin/hospital/save}" th:object="${hospitalform}" method="post" class="space-y-4">
             <input type="text" name="name" th:field="*{name}" placeholder="Hospital Name"
               class="w-full border border-gray-300 rounded px-3 py-2" required />
@@ -250,7 +237,7 @@
               class="w-full border border-gray-300 rounded px-3 py-2" required />
             <textarea name="description" th:field="*{description}" placeholder="Description"
               class="w-full border border-gray-300 rounded px-3 py-2"></textarea>
-              <input type="text" name="phonenumber" th:field="*{phonenumber}" placeholder="Phone number"
+            <input type="text" name="phonenumber" th:field="*{phonenumber}" placeholder="Phone number"
               class="w-full border border-gray-300 rounded px-3 py-2" required />
             <input type="text" name="location" th:field="*{location}" placeholder="Location (lat,long)"
               class="w-full border border-gray-300 rounded px-3 py-2" />
@@ -266,11 +253,13 @@
 
       <!-- Delete Hospital Modal -->
       <div id="deleteHospitalModal"
-        class="absolute inset-0 hidden modal-overlay z-50 flex justify-center items-start pt-20">
-        <div class="bg-white rounded-lg shadow-xl w-3/4 max-w-4xl p-6 relative overflow-auto max-h-[80vh]">
+        class="fixed inset-0 hidden modal-overlay z-50 flex justify-center items-center transition-opacity duration-300">
+        <div class="absolute inset-0 bg-black opacity-50" onclick="closeModal('deleteHospitalModal')"></div>
+        <div
+          class="relative bg-white rounded-2xl shadow-2xl w-[95%] max-w-4xl p-6 z-50 overflow-y-auto max-h-[90vh] transform transition-transform scale-100">
           <button onclick="closeModal('deleteHospitalModal')"
-            class="absolute top-3 left-3 text-gray-600 hover:text-gray-900" title="Back">← Back</button>
-          <h3 class="text-xl font-semibold mb-4">Delete Hospital</h3>
+            class="absolute top-3 left-3 text-gray-600 hover:text-black text-lg">←</button>
+          <h3 class="text-xl font-semibold mb-4 text-center">Delete Hospital</h3>
           <table class="w-full border-collapse border border-gray-300">
             <thead>
               <tr class="bg-gray-200">
@@ -300,11 +289,13 @@
 
       <!-- Update Hospital Modal -->
       <div id="updateHospitalModal"
-        class="absolute inset-0 hidden modal-overlay z-50 flex justify-center items-start pt-20">
-        <div class="bg-white rounded-lg shadow-xl w-3/4 max-w-4xl p-6 relative overflow-auto max-h-[80vh]">
+        class="fixed inset-0 hidden modal-overlay z-50 flex justify-center items-center transition-opacity duration-300">
+        <div class="absolute inset-0 bg-black opacity-50" onclick="closeModal('updateHospitalModal')"></div>
+        <div
+          class="relative bg-white rounded-2xl shadow-2xl w-[95%] max-w-4xl p-6 z-50 overflow-y-auto max-h-[90vh] transform transition-transform scale-100">
           <button onclick="closeModal('updateHospitalModal')"
-            class="absolute top-3 left-3 text-gray-600 hover:text-gray-900" title="Back">← Back</button>
-          <h3 class="text-xl font-semibold mb-4">Update Hospital</h3>
+            class="absolute top-3 left-3 text-gray-600 hover:text-black text-lg">←</button>
+          <h3 class="text-xl font-semibold mb-4 text-center">Update Hospital</h3>
           <table class="w-full border-collapse border border-gray-300 mb-6">
             <thead>
               <tr class="bg-gray-200">
@@ -364,26 +355,26 @@
         document.getElementById('updateFormContainer').classList.add('hidden');
       }
     }
- function showSection(sectionId) {
-    // Hide all sections
-    ['userSection', 'appointmentSection', 'hospitalSection', 'doctorSection'].forEach(id => {
-      document.getElementById(id).classList.add('hidden');
-    });
+    function showSection(sectionId) {
+      // Hide all sections
+      ['userSection', 'appointmentSection', 'hospitalSection', 'doctorSection'].forEach(id => {
+        document.getElementById(id).classList.add('hidden');
+      });
 
-    // Show the selected section
-    document.getElementById(sectionId).classList.remove('hidden');
+      // Show the selected section
+      document.getElementById(sectionId).classList.remove('hidden');
 
-    // 🔥 ACTIVE LINK HIGHLIGHT
-    document.querySelectorAll('.sidebar-btn').forEach(btn => {
-      btn.classList.remove('bg-white', 'text-teal-900', 'font-semibold', 'ring-2', 'ring-white');
-    });
+      // 🔥 ACTIVE LINK HIGHLIGHT
+      document.querySelectorAll('.sidebar-btn').forEach(btn => {
+        btn.classList.remove('bg-white', 'text-teal-900', 'font-semibold', 'ring-2', 'ring-white');
+      });
 
-    const activeBtnId = sectionId.replace('Section', 'Btn');
-    const activeBtn = document.getElementById(activeBtnId);
-    if (activeBtn) {
-      activeBtn.classList.add('bg-white', 'text-teal-900', 'font-semibold', 'ring-2', 'ring-white');
+      const activeBtnId = sectionId.replace('Section', 'Btn');
+      const activeBtn = document.getElementById(activeBtnId);
+      if (activeBtn) {
+        activeBtn.classList.add('bg-white', 'text-teal-900', 'font-semibold', 'ring-2', 'ring-white');
+      }
     }
-  }
     function showSection(sectionId) {
       ['userSection', 'appointmentSection', 'hospitalSection'].forEach(id => {
         document.getElementById(id).classList.add('hidden');
