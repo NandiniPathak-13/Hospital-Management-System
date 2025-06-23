@@ -85,8 +85,7 @@ public class Usercontroller {
 
         return "user/dashboard";
     }
-
-    @GetMapping("/hospital/{id}/book")
+ @GetMapping("/hospital/{id}/book")
     public String showAppointmentForm(@PathVariable Long id, Model model, Principal principal) {
         Hospital hospital = hospitalRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Hospital not found"));
@@ -101,41 +100,47 @@ public class Usercontroller {
         model.addAttribute("doctors", doctors);
         model.addAttribute("user", user);
 
-        // ✅ Correct form object passed
+        // 👇 Form object and confirmation flag
         model.addAttribute("appointmentform", new AppointmentForm());
-        // model.addAttribute("appointmentform", new AppointmentForm());
-        model.addAttribute("notConfirmed", true);
+        model.addAttribute("confirmed", false); // important for UI logic
 
         return "user/appointment";
     }
 
+    // ================= POST: Handle Form Submission ===================
     @PostMapping("/submit-appointment")
     public String submitAppointment(@ModelAttribute("appointmentform") AppointmentForm form,
-            Principal principal,
-            Model model) {
+                                    Principal principal,
+                                    Model model) {
+
+        // 🧠 Fetch necessary entities
         User user = userservice.getUserByEmail(principal.getName());
         Hospital hospital = hospitalRepository.findById(form.getHospitalId())
                 .orElseThrow(() -> new RuntimeException("Hospital not found"));
         Doctor selectedDoctor = doctor.findById(form.getDoctorId())
                 .orElseThrow(() -> new RuntimeException("Doctor not found"));
 
+        // ✅ Create and save appointment
         Appointment appointment = Appointment.builder()
                 .user(user)
                 .hospital(hospital)
                 .doctor(selectedDoctor)
                 .patientName(form.getPatientName())
                 .phoneNumber(form.getPhoneNumber())
+                .details(form.getDetails())
                 .date(form.getDate())
                 .build();
 
         appointmentRepo.save(appointment);
 
-        // ✅ Sab cheeze model me dobara daalni hai
-        model.addAttribute("appointment", appointment);
-        model.addAttribute("appointmentform", new AppointmentForm()); // Fresh object bhejna
-        model.addAttribute("hospital", hospital);
-        model.addAttribute("doctor", selectedDoctor);
-        model.addAttribute("confirmed", true);
+        // 🎯 Return same form with confirmation & data
+        model.addAttribute("appointmentform", new AppointmentForm()); // reset form
+        model.addAttribute("appointment", appointment); // receipt info
+        model.addAttribute("hospital", hospital);       // hospital for name/phone
+        model.addAttribute("doctor", selectedDoctor);   // doctor for receipt
+        model.addAttribute("confirmed", true);          // toggle receipt modal
+        model.addAttribute("showNavbar", true);         // keep navbar
+        model.addAttribute("doctors", doctor.findByHospitalId(hospital.getId())); // reload doctors list
 
         return "user/appointment";
     }
