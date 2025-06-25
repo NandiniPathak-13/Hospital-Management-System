@@ -10,8 +10,8 @@
 <body class="bg-gray-100 text-gray-900">
   <section id="content">
     <div class="max-w-xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
-      <!-- Appointment Form -->
-      <div class="bg-white rounded-2xl shadow-lg p-6 border border-blue-200" th:if="${!confirmed}">
+      <!-- Appointment Form (always show) -->
+      <div class="bg-white rounded-2xl shadow-lg p-6 border border-blue-200">
         <h2 class="text-xl sm:text-2xl font-bold text-blue-900 mb-4 text-center">
           Book Appointment at <span th:text="${hospital.name}">Hospital Name</span>
         </h2>
@@ -52,33 +52,38 @@
           </button>
         </form>
       </div>
-
-      <!-- Confirmation Modal -->
-      <div id="receiptModal" th:if="${confirmed}"
-        class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-        <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6 text-center">
-          <h2 class="text-xl font-bold text-green-800 mb-4">🎉 Appointment Confirmed!</h2>
-
-          <div id="receiptContent" class="text-sm text-gray-800 space-y-2 text-left">
-            <p><strong>Patient Name:</strong> <span th:text="${appointment.patientName}"></span></p>
-            <p><strong>Hospital:</strong> <span th:text="${hospital.name}"></span></p>
-            <p><strong>Doctor:</strong> <span th:text="${doctor.name}"></span></p>
-            <p><strong>Date:</strong> <span th:text="${appointment.date}"></span></p>
-            <p><strong>Approx. Time:</strong> 10:30 AM</p>
-          </div>
-
-          <div class="mt-4 flex justify-between">
-            <button onclick="downloadModalReceipt()"
-              class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">⬇️ Download</button>
-            <a th:href="@{/home}" class="text-red-600 hover:underline font-medium">Close</a>
-          </div>
-        </div>
-      </div>
     </div>
   </section>
 
-  <!-- Download Script -->
+  <!-- Appointment Receipt Modal -->
+  <div id="receiptModal" th:if="${confirmed}"
+    class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6 text-center">
+      <h2 class="text-xl font-bold text-green-800 mb-4">🎉 Appointment Confirmed!</h2>
+
+      <div id="receiptContent" class="text-sm text-gray-800 space-y-2 text-left">
+        <p><strong>Patient Name:</strong> <span th:text="${appointment.patientName}"></span></p>
+        <p><strong>Hospital:</strong> <span th:text="${hospital.name}"></span></p>
+        <p><strong>Doctor:</strong> <span th:text="${doctor.name}"></span></p>
+        <p><strong>Date:</strong> <span th:text="${appointment.date}"></span></p>
+        <p><strong>Approx. Time:</strong> 10:30 AM</p>
+      </div>
+
+      <div class="mt-4 flex justify-between">
+        <button onclick="downloadModalReceipt()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+          ⬇️ Download
+        </button>
+        <button onclick="closeReceiptModal()" class="text-red-600 hover:underline font-medium">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Logic -->
   <script>
+    function closeReceiptModal() {
+      document.getElementById("receiptModal").classList.add("hidden");
+    }
+
     function downloadModalReceipt() {
       const receipt = document.getElementById("receiptContent").innerText;
       const blob = new Blob([receipt], { type: 'text/plain' });
