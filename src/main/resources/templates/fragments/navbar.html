@@ -16,7 +16,7 @@
           <!-- Profile Dropdown Modal inside Navbar -->
           <!-- Avatar Button -->
           <!-- Profile Button & Dropdown Wrapper -->
-<div th:if="${currentPath.startsWith('/user') and LoggedInUser != null}" class="relative inline-block text-left">
+<div th:if="${currentPath != null and LoggedInUser != null and #strings.startsWith(currentPath, '/user')}"  class="relative inline-block text-left">
   <!-- Avatar Button -->
   <button id="profileBtn" type="button" class="inline-flex items-center rounded-full focus:outline-none">
     <img th:src="@{/chatgpt-logo.png}" class="h-10 w-10 rounded-full border border-white" alt="Avatar">
