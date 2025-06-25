@@ -1,5 +1,6 @@
 <div th:fragment="navbar">
-  <p th:text="${LoggedInUser}">No user</p>
+<p th:text="${LoggedInUser?.name} ?: 'No user'"></p>
+
   <nav class="bg-teal-900 text-white  w-full border-b border-gray-200 dark:border-gray-600">
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
       <a href="https://flowbite.com/" class="flex items-center space-x-3 rtl:space-x-reverse">
@@ -16,49 +17,51 @@
           <!-- Profile Dropdown Modal inside Navbar -->
           <!-- Avatar Button -->
           <!-- Profile Button & Dropdown Wrapper -->
-<div th:if="${currentPath != null and LoggedInUser != null and #strings.startsWith(currentPath, '/user')}"  class="relative inline-block text-left">
-  <!-- Avatar Button -->
-  <button id="profileBtn" type="button" class="inline-flex items-center rounded-full focus:outline-none">
-    <img th:src="@{/chatgpt-logo.png}" class="h-10 w-10 rounded-full border border-white" alt="Avatar">
-  </button>
+          <div th:if="${#strings.startsWith(currentPath ?: '', '/user') and LoggedInUser?.name != null}"
+            class="relative inline-block text-left">
+            <!-- Avatar Button -->
+            <button id="profileBtn" type="button" class="inline-flex items-center rounded-full focus:outline-none">
+              <img th:src="@{/chatgpt-logo.png}" class="h-10 w-10 rounded-full border border-white" alt="Avatar">
+            </button>
 
-  <!-- Dropdown -->
-  <div id="profileDropdown"
-    class="hidden absolute right-0 mt-2 w-72 bg-white dark:bg-gray-800 rounded-lg shadow-xl z-50 p-4">
+            <!-- Dropdown -->
+            <div id="profileDropdown" class="hidden absolute right-0 mt-2 w-72 bg-white rounded-lg shadow-xl z-50 p-4">
 
-    <!-- User Info -->
-    <div class="flex items-center gap-4 border-b pb-3">
-      <div id="dropdown-user-avatar" th:attr="data-name=${LoggedInUser.name}"
-        class="w-12 h-12 bg-blue-500 text-white flex items-center justify-center rounded-full font-bold text-lg">
-      </div>
-      <div>
-        <h3 class="font-semibold text-lg" th:text="${LoggedInUser.name}">Name</h3>
-        <p class="text-sm text-gray-500 dark:text-gray-300" th:text="${LoggedInUser.email}">Email</p>
-      </div>
-    </div>
+              <!-- User Info -->
+              <div class="flex items-center gap-4 border-b pb-3">
+                <div id="dropdown-user-avatar" th:attr="data-name=${LoggedInUser.name}"
+                  class="w-12 h-12 bg-blue-500 text-white flex items-center justify-center rounded-full font-bold text-lg">
+                </div>
+                <div>
+                  <h3 class="font-semibold text-lg" th:text="${LoggedInUser.name}">Name</h3>
+                  <p class="text-sm text-gray-500 dark:text-gray-300" th:text="${LoggedInUser.email}">Email</p>
+                </div>
+              </div>
 
-    <!-- Phone Section -->
-    <div class="mt-4 text-sm">
-      <label class="block font-medium text-gray-700 dark:text-gray-400">Phone</label>
-      <div th:if="${LoggedInUser.phoneNumber != null}">
-        <p th:text="${LoggedInUser.phoneNumber}">+91-0000000000</p>
-      </div>
-      <div th:if="${LoggedInUser.phoneNumber == null}">
-        <form th:action="@{/update-phoneNumber}" method="post" class="flex gap-2 mt-2">
-          <input type="text" name="phoneNumber" placeholder="Add phone"
-            class="w-full px-2 py-1 rounded border dark:bg-gray-700 dark:text-white">
-          <button type="submit" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">Save</button>
-        </form>
-      </div>
-    </div>
+              <!-- Phone Section -->
+              <div class="mt-4 text-sm">
+                <label class="block font-medium text-gray-700 dark:text-gray-400">Phone</label>
+                <div th:if="${LoggedInUser.phoneNumber != null}">
+                  <p th:text="${LoggedInUser.phoneNumber}">+91-0000000000</p>
+                </div>
+                <div th:if="${LoggedInUser.phoneNumber == null}">
+                  <form th:action="@{/update-phoneNumber}" method="post" class="flex gap-2 mt-2">
+                    <input type="text" name="phoneNumber" placeholder="Add phone"
+                      class="w-full px-2 py-1 rounded border dark:bg-gray-700 dark:text-white">
+                    <button type="submit"
+                      class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">Save</button>
+                  </form>
+                </div>
+              </div>
 
-    <!-- Action Buttons -->
-    <a th:href="@{/user/update-profile}"
-      class="block mt-4 text-center bg-green-600 text-white py-2 rounded hover:bg-green-700">Update Profile</a>
-    <a th:href="@{/do-logout}"
-      class="block mt-2 text-center bg-red-600 text-white py-2 rounded hover:bg-red-700">Logout</a>
-  </div>
-</div>
+              <!-- Action Buttons -->
+              <a th:href="@{/user/update-profile}"
+                class="block mt-4 text-center bg-green-600 text-white py-2 rounded hover:bg-green-700">Update
+                Profile</a>
+              <a th:href="@{/do-logout}"
+                class="block mt-2 text-center bg-red-600 text-white py-2 rounded hover:bg-red-700">Logout</a>
+            </div>
+          </div>
 
 
 
@@ -170,53 +173,53 @@
 
 
     </script>
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const profileBtn = document.getElementById("profileBtn");
-    const dropdown = document.getElementById("profileDropdown");
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const profileBtn = document.getElementById("profileBtn");
+        const dropdown = document.getElementById("profileDropdown");
 
-    // Show/hide dropdown
-    profileBtn?.addEventListener("click", function (event) {
-      event.stopPropagation();
-      dropdown.classList.toggle("hidden");
-    });
+        // Show/hide dropdown
+        profileBtn?.addEventListener("click", function (event) {
+          event.stopPropagation();
+          dropdown.classList.toggle("hidden");
+        });
 
-    // Close dropdown on outside click
-    document.addEventListener("click", function (event) {
-      if (!dropdown.contains(event.target)) {
-        dropdown.classList.add("hidden");
+        // Close dropdown on outside click
+        document.addEventListener("click", function (event) {
+          if (!dropdown.contains(event.target)) {
+            dropdown.classList.add("hidden");
+          }
+        });
+
+        // Avatar initials logic
+        const avatar = document.getElementById("dropdown-user-avatar");
+        if (avatar && avatar.dataset.name) {
+          const name = avatar.dataset.name.trim();
+          const parts = name.split(" ");
+          avatar.innerText = parts.length > 1
+            ? (parts[0][0] + parts[1][0]).toUpperCase()
+            : parts[0][0].toUpperCase();
+        }
+      });
+    </script>
+
+
+
+    <script>
+      function getInitials(name) {
+        if (!name) return "?";
+        const parts = name.trim().split(" ");
+        if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
+        return (parts[0][0] + parts[1][0]).toUpperCase();
       }
-    });
 
-    // Avatar initials logic
-    const avatar = document.getElementById("dropdown-user-avatar");
-    if (avatar && avatar.dataset.name) {
-      const name = avatar.dataset.name.trim();
-      const parts = name.split(" ");
-      avatar.innerText = parts.length > 1
-        ? (parts[0][0] + parts[1][0]).toUpperCase()
-        : parts[0][0].toUpperCase();
-    }
-  });
-</script>
-
-
-
-<script>
-  function getInitials(name) {
-    if (!name) return "?";
-    const parts = name.trim().split(" ");
-    if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
-    return (parts[0][0] + parts[1][0]).toUpperCase();
-  }
-
-  document.addEventListener("DOMContentLoaded", function () {
-    const avatar = document.getElementById("dropdown-user-avatar");
-    if (avatar && avatar.dataset.name) {
-      avatar.innerText = getInitials(avatar.dataset.name);
-    }
-  });
-</script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const avatar = document.getElementById("dropdown-user-avatar");
+        if (avatar && avatar.dataset.name) {
+          avatar.innerText = getInitials(avatar.dataset.name);
+        }
+      });
+    </script>
 
 
 
