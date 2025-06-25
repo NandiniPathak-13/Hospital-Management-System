@@ -74,6 +74,7 @@ public class Usercontroller {
             User user = userservice.getUserByEmail(principal.getName());
             model.addAttribute("LoggedInUser", user);
         }
+        model.addAttribute("currentPath", path);
     }
 
     @RequestMapping("/dashboard")
