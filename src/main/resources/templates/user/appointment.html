@@ -52,61 +52,60 @@
           </button>
         </form>
       </div>
-
-      <!-- Confirmation Receipt -->
-      <div th:if="${confirmed}" class="bg-green-50 border border-green-300 mt-8 rounded-xl shadow-md p-6">
-        <h2 class="text-xl font-bold text-green-800 mb-2">Appointment Confirmed!</h2>
-
-        <p class="mb-1"><strong>Patient Name:</strong>
-          <span th:text="${appointment.patientName}">Patient Name</span>
-        </p>
-        <p class="mb-1"><strong>Hospital:</strong>
-          <span th:text="${hospital.name}">Hospital Name</span>
-        </p>
-        <p class="mb-1"><strong>Doctor:</strong>
-          <span th:text="${doctor.name}">Doctor Name</span>
-        </p>
-        <p class="mb-1"><strong>Date:</strong>
-          <span th:text="${appointment.date}">Appointment Date</span>
-        </p>
-        <p class="mb-3"><strong>Phone for Confirmation:</strong>
-          <span th:text="${hospital.phonenumber}">1234567890</span>
-        </p>
-
-        <!-- Call Now Button -->
-        <a th:href="'tel:' + ${hospital.phonenumber}"
-          class="inline-block mt-2 mb-3 bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800 transition">
-          📞 Call Now
-        </a>
-
-        <!-- Receipt Download (Optional: hidden by default) -->
-        <button onclick="downloadReceipt()" class="block bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
-          ⬇️ Download Receipt
-        </button>
-      </div>
     </div>
   </section>
 
-  <!-- Optional Script for Download -->
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      function downloadReceipt() {
-        const receiptContent = document.querySelector('[th\\:if="${confirmed}"]').innerText;
-        const blob = new Blob([receiptContent], { type: 'text/plain' });
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = "appointment_receipt.txt";
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      }
+  <!-- Appointment Receipt Modal -->
+  <div id="receiptModal"
+    class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6 text-center">
+      <h2 class="text-xl font-bold text-green-800 mb-4">🎉 Appointment Confirmed!</h2>
 
-      // Attach the download function to the button
-      const downloadButton = document.querySelector('button[onclick="downloadReceipt()"]');
-      if (downloadButton) {
-        downloadButton.addEventListener('click', downloadReceipt);
-      }
+      <div id="receiptContent" class="text-sm text-gray-800 space-y-2 text-left">
+        <p><strong>Patient Name:</strong> <span id="modalPatientName"></span></p>
+        <p><strong>Hospital:</strong> <span id="modalHospitalName"></span></p>
+        <p><strong>Doctor:</strong> <span id="modalDoctorName"></span></p>
+        <p><strong>Date:</strong> <span id="modalDate"></span></p>
+        <p><strong>Approx. Time:</strong> <span id="modalTime">10:30 AM</span></p>
+      </div>
+
+      <div class="mt-4 flex justify-between">
+        <button onclick="downloadModalReceipt()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+          ⬇️ Download
+        </button>
+        <button onclick="closeReceiptModal()" class="text-red-600 hover:underline font-medium">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Show modal after confirmation -->
+  <script th:if="${confirmed}">
+    document.addEventListener("DOMContentLoaded", function () {
+      document.getElementById("receiptModal").classList.remove("hidden");
+
+      document.getElementById("modalPatientName").innerText = [[${appointment.patientName}]];
+      document.getElementById("modalHospitalName").innerText = [[${hospital.name}]];
+      document.getElementById("modalDoctorName").innerText = [[${doctor.name}]];
+      document.getElementById("modalDate").innerText = [[${appointment.date}]];
     });
+  </script>
+
+  <!-- Modal Logic -->
+  <script>
+    function closeReceiptModal() {
+      document.getElementById("receiptModal").classList.add("hidden");
+    }
+
+    function downloadModalReceipt() {
+      const receipt = document.getElementById("receiptContent").innerText;
+      const blob = new Blob([receipt], { type: 'text/plain' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = "appointment_receipt.txt";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
   </script>
 
   <div id="script"></div>

@@ -31,7 +31,6 @@ import com.hospitals.services.Doctorservice;
 import com.hospitals.services.Hospitalservice;
 import com.hospitals.services.Userservice;
 
-import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping("/user")
@@ -72,59 +71,66 @@ public class Usercontroller {
 
         return "user/dashboard";
     }
+
+       // SHOW APPOINTMENT FORM
     @GetMapping("/hospital/{id}/book")
-   public String showAppointmentForm(@PathVariable Long id, Model model, Principal principal) {
-       Hospital hospital = hospitalRepository.findById(id)
-               .orElseThrow(() -> new RuntimeException("Hospital not found"));
+    public String showAppointmentForm(@PathVariable Long id, Model model, Principal principal) {
+        Hospital hospital = hospitalRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Hospital not found"));
 
-       String username = principal.getName();
-       User user = userservice.getUserByEmail(username);
+        String username = principal.getName();
+        User user = userservice.getUserByEmail(username);
 
-       List<Doctor> doctors = doctor.findByHospitalId(id);
+        List<Doctor> doctors = doctor.findByHospitalId(id);
 
-       model.addAttribute("showNavbar", true);
-       model.addAttribute("hospital", hospital);
-       model.addAttribute("doctors", doctors);
-       model.addAttribute("user", user);
-       model.addAttribute("appointmentform", new AppointmentForm());
-       model.addAttribute("confirmed", false); // important for UI logic
+        model.addAttribute("showNavbar", true);
+        model.addAttribute("hospital", hospital);
+        model.addAttribute("doctors", doctors);
+        model.addAttribute("user", user);
+        model.addAttribute("appointmentform", new AppointmentForm());
+        model.addAttribute("confirmed", false); // To control modal visibility
 
-       return "user/appointment";
-   }
-   
+        return "user/appointment";  // Thymeleaf view
+    }
 
-      @PostMapping("/submit-appointment")
-   public String submitAppointment(@ModelAttribute("appointmentform") AppointmentForm form,
-                                   Principal principal,
-                                   Model model) {
-       User user = userservice.getUserByEmail(principal.getName());
-       Hospital hospital = hospitalRepository.findById(form.getHospitalId())
-               .orElseThrow(() -> new RuntimeException("Hospital not found"));
-       Doctor selectedDoctor = doctor.findById(form.getDoctorId())
-               .orElseThrow(() -> new RuntimeException("Doctor not found"));
+    // SUBMIT APPOINTMENT FORM
+    @PostMapping("/submit-appointment")
+    public String submitAppointment(@ModelAttribute("appointmentform") AppointmentForm form,
+                                    Principal principal,
+                                    Model model) {
+        User user = userservice.getUserByEmail(principal.getName());
 
-       Appointment appointment = Appointment.builder()
-               .user(user)
-               .hospital(hospital)
-               .doctor(selectedDoctor)
-               .patientName(form.getPatientName())
-               .phoneNumber(form.getPhoneNumber())
-               .details(form.getDetails())
-               .date(form.getDate())
-               .build();
+        Hospital hospital = hospitalRepository.findById(form.getHospitalId())
+                .orElseThrow(() -> new RuntimeException("Hospital not found"));
 
-       appointmentRepo.save(appointment); // Save to database
+        Doctor selectedDoctor = doctor.findById(form.getDoctorId())
+                .orElseThrow(() -> new RuntimeException("Doctor not found"));
 
-       model.addAttribute("appointmentform", new AppointmentForm()); // reset form
-       model.addAttribute("appointment", appointment); // receipt info
-       model.addAttribute("hospital", hospital);       // hospital for name/phone
-       model.addAttribute("doctor", selectedDoctor);   // doctor for receipt
-       model.addAttribute("confirmed", true);          // toggle receipt modal
-       model.addAttribute("showNavbar", true);         // keep navbar
-       model.addAttribute("doctors", doctor.findByHospitalId(hospital.getId())); // reload doctors list
+        // Build and save appointment
+        Appointment appointment = Appointment.builder()
+                .user(user)
+                .hospital(hospital)
+                .doctor(selectedDoctor)
+                .patientName(form.getPatientName())
+                .phoneNumber(form.getPhoneNumber())
+                .details(form.getDetails())
+                .date(form.getDate())
+                .build();
 
-       return "user/appointment";
-   }
+        appointmentRepo.save(appointment);
+
+        // Pass back everything needed for receipt modal
+        model.addAttribute("appointment", appointment);
+        model.addAttribute("hospital", hospital);
+        model.addAttribute("doctor", selectedDoctor);
+        model.addAttribute("confirmed", true); // Toggle modal
+        model.addAttribute("showNavbar", true);
+        model.addAttribute("doctors", doctor.findByHospitalId(hospital.getId()));
+        model.addAttribute("appointmentform", new AppointmentForm()); // Reset form
+
+        return "user/appointment";  // Reload same view with receipt info
+    }
+
    
     @PostMapping("/delete/{id}")
     public String deleteHospital(@PathVariable("id") Long id) {
@@ -147,13 +153,7 @@ public class Usercontroller {
         return "user/hospitaldetails"; // Make sure this file exists in templates!
     }
 
-    // @RequestMapping("/profile")
-    // public String userproofile(Model model, Principal principal) {
-    // String name = principal.getName();
-    // logger.info("User logged in: {}", name);
-    // System.out.println("User profile");
-    // return "user/profile";
-    // }
+   
 
     @GetMapping("/profile")
     public String userProfile(Model model, Authentication authentication,
