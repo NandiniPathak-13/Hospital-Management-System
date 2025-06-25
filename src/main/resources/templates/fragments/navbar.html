@@ -16,39 +16,43 @@
           <!-- Profile Dropdown Modal inside Navbar -->
           <!-- Avatar Button -->
           <!-- Profile Button & Dropdown Wrapper -->
+          <!-- Profile Button & Dropdown -->
           <div th:if="${#strings.startsWith(currentPath ?: '', '/user') and LoggedInUser?.name != null}"
             class="relative inline-block text-left">
-            <!-- Avatar Button -->
+
+            <!-- Button Trigger -->
             <button id="profileBtn" type="button"
-              class="text-white hover:text-yellow-400 transition duration-200 font-medium">
+              class="text-white font-medium hover:text-yellow-400 transition duration-200">
               Profile
             </button>
 
-            <!-- Dropdown -->
-            <div id="profileDropdown" class="hidden absolute right-0 mt-2 w-72 bg-white rounded-lg shadow-xl z-50 p-4">
+            <!-- Dropdown Panel -->
+            <div id="profileDropdown"
+              class="hidden absolute right-0 mt-2 w-72 bg-white rounded-xl shadow-lg z-50 p-5 text-center">
 
-              <!-- User Info -->
-              <div class="flex items-center gap-4 border-b pb-3">
-                <div id="dropdown-user-avatar" th:attr="data-name=${LoggedInUser.name}"
-                  class="mx-auto mb-3 w-14 h-14 bg-blue-600 text-white flex items-center justify-center rounded-full text-xl font-bold">
-                </div>
-                <div>
-                  <h3 class="font-semibold text-lg mb-1" th:text="${LoggedInUser.name}">Name</h3>
-                  <p class="text-sm text-black mb-3" th:text="${LoggedInUser.email}">Email</p>
-
-                </div>
+              <!-- Avatar -->
+              <div id="dropdown-user-avatar" th:attr="data-name=${LoggedInUser.name}"
+                class="mx-auto w-16 h-16 bg-blue-600 text-white flex items-center justify-center rounded-full text-2xl font-bold mb-3">
               </div>
 
+              <!-- User Name & Email -->
+              <h3 class="text-lg font-semibold text-gray-900" th:text="${LoggedInUser.name}">Name</h3>
+              <p class="text-sm text-gray-600 mb-3" th:text="${LoggedInUser.email}">email@example.com</p>
+
+              <hr class="my-3">
+
               <!-- Phone Section -->
-              <div class="mt-4 text-sm">
-                <label class="block font-medium text-gray-700 dark:text-gray-400">Phone</label>
-                <div th:if="${LoggedInUser.phoneNumber != null}" class="text-sm text-gray-700 mb-4">
+              <div class="text-left text-sm mb-4">
+                <label class="block font-medium text-gray-700">Phone</label>
+
+                <div th:if="${LoggedInUser.phoneNumber != null}" class="text-gray-800 mt-1">
                   📱 <span th:text="${LoggedInUser.phoneNumber}">+91-0000000000</span>
                 </div>
-                <div th:if="${LoggedInUser.phoneNumber == null}">
-                  <form th:action="@{/update-phoneNumber}" method="post" class="flex gap-2 mt-2">
+
+                <div th:if="${LoggedInUser.phoneNumber == null}" class="mt-2">
+                  <form th:action="@{/update-phoneNumber}" method="post" class="flex gap-2">
                     <input type="text" name="phoneNumber" placeholder="Add phone"
-                      class="w-full px-2 py-1 rounded border dark:bg-gray-700 dark:text-white">
+                      class="w-full px-2 py-1 border rounded bg-gray-50 focus:ring focus:ring-blue-300">
                     <button type="submit"
                       class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">Save</button>
                   </form>
@@ -56,11 +60,16 @@
               </div>
 
               <!-- Action Buttons -->
-              <a th:href="@{/user/update-profile}"
-                class="block mt-4 text-center bg-green-600 text-white py-2 rounded hover:bg-green-700">Update
-                Profile</a>
-              <a th:href="@{/do-logout}"
-                class="block bg-red-600 hover:bg-red-700 text-white py-2 rounded text-sm">Logout</a>
+              <div class="space-y-2">
+                <a th:href="@{/user/update-profile}"
+                  class="block w-full bg-green-600 hover:bg-green-700 text-white text-sm py-2 rounded font-medium">
+                  Update Profile
+                </a>
+                <a th:href="@{/do-logout}"
+                  class="block w-full bg-red-600 hover:bg-red-700 text-white text-sm py-2 rounded font-medium">
+                  Logout
+                </a>
+              </div>
             </div>
           </div>
 
