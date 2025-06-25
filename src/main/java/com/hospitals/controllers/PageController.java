@@ -44,17 +44,6 @@ private AppointmentService appointmentservice;
 
     @Autowired
     private Hospitalservice hospitalservice;
-@ModelAttribute
-public void addCommonAttributes(Model model, Principal principal, HttpServletRequest request) {
-    String path = request.getRequestURI();
-
-    if (principal != null) {
-        User user = userservice.getUserByEmail(principal.getName());
-        model.addAttribute("LoggedInUser", user);
-    }
-
-    model.addAttribute("currentPath", path);
-}
 
     // HOME page
     @RequestMapping("/home")

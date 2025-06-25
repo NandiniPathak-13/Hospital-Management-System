@@ -61,21 +61,7 @@ public class Usercontroller {
     @Autowired
     private HospitalRepo hospitalRepository;
 
-    @ModelAttribute
-    public void addLoggedInUserToModel(Model model, Principal principal, HttpServletRequest request) {
-        String path = request.getRequestURI();
-
-        if (path.startsWith("/login") || path.startsWith("/register")) {
-            User guest = new User();
-            guest.setName("Guest");
-            guest.setEmail("guest@example.com");
-            model.addAttribute("LoggedInUser", guest);
-        } else if (principal != null) {
-            User user = userservice.getUserByEmail(principal.getName());
-            model.addAttribute("LoggedInUser", user);
-        }
-        model.addAttribute("currentPath", path);
-    }
+    
 
     @RequestMapping("/dashboard")
     public String dashboard(Model model) {
