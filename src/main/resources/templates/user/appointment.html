@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-  <!-- th:replace="~{base :: parent(~{::#content},~{::#title},~{::#script})}"> -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+  th:replace="~{base :: parent(~{::#content},~{::#title},~{::#script})}">
 
 <head>
-  <title>Book Appointment</title>
+  <title id="title">Book Appointment</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
 <body class="bg-gray-100 text-gray-900">
-  <section>
+  <section id="content">
     <div class="max-w-xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
       <!-- Appointment Form (always show) -->
       <div class="bg-white rounded-2xl shadow-lg p-6 border border-blue-200">
@@ -17,7 +17,7 @@
         </h2>
 
         <form th:action="@{/submit-appointment}" th:object="${appointmentform}" method="post" class="space-y-4">
-          <input type="hidden" th:field="*{hospitalId}" />
+          <input type="hidden" name="hospitalId" th:value="${hospital.id}" />
 
           <div>
             <label class="block text-sm font-medium text-blue-800 mb-1">Patient Name</label>
@@ -80,7 +80,7 @@
 
   <!-- Modal Logic -->
   
-  <!-- <div id="script"> -->
+  <div id="script">
     <script>
     function closeReceiptModal() {
       document.getElementById("receiptModal").classList.add("hidden");
@@ -98,7 +98,7 @@
     }
   </script>
 
-  <!-- </div> -->
+  </div>
 </body>
 
 </html>
