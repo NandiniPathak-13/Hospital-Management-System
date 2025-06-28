@@ -138,7 +138,7 @@ private AppointmentService appointmentservice;
       @RequestMapping("/")
 public String Dashboard(Model model) {
    model.addAttribute("showNavbar", true);
-    return "home"; // This matches your Thymeleaf template: admin.html
+    return "user/dashboard"; // This matches your Thymeleaf template: admin.html
 }
 
 

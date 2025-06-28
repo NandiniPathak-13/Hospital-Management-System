@@ -16,12 +16,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.hospitals.entities.Appointment;
 import com.hospitals.entities.Doctor;
 import com.hospitals.entities.Hospital;
 import com.hospitals.entities.User;
 import com.hospitals.forms.AppointmentForm;
+import com.hospitals.forms.Doctorform;
 import com.hospitals.helpers.Helper;
 import com.hospitals.repositories.AppointmentRepo;
 import com.hospitals.repositories.Doctorrepo;
@@ -94,42 +96,47 @@ public class Usercontroller {
     }
 
     // SUBMIT APPOINTMENT FORM
-    @PostMapping("/submit-appointment")
-    public String submitAppointment(@ModelAttribute("appointmentform") AppointmentForm form,
-                                    Principal principal,
-                                    Model model) {
-        User user = userservice.getUserByEmail(principal.getName());
+   @PostMapping("/submit-appointment")
+public String submitAppointment(@ModelAttribute AppointmentForm appointmentform,
+                                Principal principal,
+                                RedirectAttributes redirectAttributes,
+                                Model model) {
 
-        Hospital hospital = hospitalRepository.findById(form.getHospitalId())
-                .orElseThrow(() -> new RuntimeException("Hospital not found"));
+    // 1. Logged-in user
+    User user = userservice.getUserByEmail(principal.getName());
 
-        Doctor selectedDoctor = doctor.findById(form.getDoctorId())
-                .orElseThrow(() -> new RuntimeException("Doctor not found"));
+    // 2. Get hospital
+    Hospital hospital = hospitalRepository.findById(appointmentform.getHospitalId())
+            .orElseThrow(() -> new RuntimeException("Hospital not found"));
 
-        // Build and save appointment
-        Appointment appointment = Appointment.builder()
-                .user(user)
-                .hospital(hospital)
-                .doctor(selectedDoctor)
-                .patientName(form.getPatientName())
-                .phoneNumber(form.getPhoneNumber())
-                .details(form.getDetails())
-                .date(form.getDate())
-                .build();
+    // 3. Get doctor
+    Doctor selectedDoctor = doctor.findById(appointmentform.getDoctorId())
+            .orElseThrow(() -> new RuntimeException("Doctor not found"));
 
-        appointmentRepo.save(appointment);
+    // 4. Create and set appointment using setters (no builder!)
+    Appointment appointment = new Appointment();
+    appointment.setUser(user);
+    appointment.setHospital(hospital);
+    appointment.setDoctor(selectedDoctor);
+    appointment.setPatientName(appointmentform.getPatientName());
+    appointment.setPhoneNumber(appointmentform.getPhoneNumber());
+    appointment.setDetails(appointmentform.getDetails());
+    appointment.setDate(appointmentform.getDate());
 
-        // Pass back everything needed for receipt modal
-        model.addAttribute("appointment", appointment);
-        model.addAttribute("hospital", hospital);
-        model.addAttribute("doctor", selectedDoctor);
-        model.addAttribute("confirmed", true); // Toggle modal
-        model.addAttribute("showNavbar", true);
-        model.addAttribute("doctors", doctor.findByHospitalId(hospital.getId()));
-        model.addAttribute("appointmentform", new AppointmentForm()); // Reset form
+    // 5. Save appointment
+    appointmentRepo.save(appointment);
 
-        return "user/appointment";  // Reload same view with receipt info
-    }
+    // 6. Set receipt data for confirmation display
+    model.addAttribute("appointment", appointment);
+    model.addAttribute("hospital", hospital);
+    model.addAttribute("doctor", selectedDoctor);
+    model.addAttribute("confirmed", true); // toggle receipt
+    model.addAttribute("showNavbar", true);
+    model.addAttribute("doctors", doctor.findByHospitalId(hospital.getId()));
+    model.addAttribute("appointmentform", new AppointmentForm()); // reset form
+
+    return "user/appointment"; // show receipt on same page
+}
 
    
     @PostMapping("/delete/{id}")
