@@ -90,7 +90,7 @@ public class Usercontroller {
         model.addAttribute("doctors", doctors);
         model.addAttribute("user", user);
         model.addAttribute("appointmentform", new AppointmentForm());
-        model.addAttribute("confirmed", false); // To control modal visibility
+        model.addAttribute("confirmed", true); // To control modal visibility
 
         return "user/appointment";  // Thymeleaf view
     }
