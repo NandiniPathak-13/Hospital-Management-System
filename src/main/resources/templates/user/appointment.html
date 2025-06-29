@@ -1,23 +1,23 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-  th:replace="~{base :: parent(~{::#content},~{::#title},~{::#script})}">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <title id="title">Book Appointment</title>
+  <title>Book Appointment</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 
 <body class="bg-gray-100 text-gray-900">
-  <section id="content">
+  <section>
     <div class="max-w-xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
-      <!-- Appointment Form (always show) -->
+      <!-- Appointment Form -->
       <div class="bg-white rounded-2xl shadow-lg p-6 border border-blue-200">
         <h2 class="text-xl sm:text-2xl font-bold text-blue-900 mb-4 text-center">
           Book Appointment at <span th:text="${hospital.name}">Hospital Name</span>
         </h2>
 
         <form th:action="@{/submit-appointment}" th:object="${appointmentform}" method="post" class="space-y-4">
-          <input type="hidden" name="hospitalId" th:value="${hospital.id}" />
+          <input type="hidden" th:field="*{hospitalId}" th:value="${hospital.id}" />
 
           <div>
             <label class="block text-sm font-medium text-blue-800 mb-1">Patient Name</label>
@@ -42,7 +42,9 @@
             <select th:field="*{doctorId}" required
               class="w-full p-2 border border-blue-300 rounded-md focus:ring focus:ring-blue-400">
               <option value="">-- Choose Doctor --</option>
-              <option th:each="doctor : ${doctors}" th:value="${doctor.id}" th:text="${doctor.name}">Dr. Name</option>
+              <option th:each="doctor : ${doctors}" th:value="${doctor.id}" th:text="${doctor.name}">
+                Dr. Name
+              </option>
             </select>
           </div>
 
@@ -53,6 +55,7 @@
         </form>
       </div>
     </div>
+  </section>
 
   <!-- Appointment Receipt Modal -->
   <div id="receiptModal" th:if="${confirmed}"
@@ -76,12 +79,8 @@
       </div>
     </div>
   </div>
-  </section>
 
-  <!-- Modal Logic -->
-  
-  <div id="script">
-    <script>
+  <script>
     function closeReceiptModal() {
       document.getElementById("receiptModal").classList.add("hidden");
     }
@@ -97,8 +96,6 @@
       document.body.removeChild(link);
     }
   </script>
-
-  </div>
 </body>
 
 </html>
