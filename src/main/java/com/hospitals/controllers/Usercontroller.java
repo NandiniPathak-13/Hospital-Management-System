@@ -82,7 +82,8 @@ public class Usercontroller {
         User user = userservice.getUserByEmail(username);
 
         List<Doctor> doctors = doctor.findByHospitalId(id);
-
+        AppointmentForm form = new AppointmentForm();
+        form.setHospitalId(id);
         model.addAttribute("showNavbar", true);
         model.addAttribute("hospital", hospital);
         model.addAttribute("doctors", doctors);
@@ -115,6 +116,7 @@ public class Usercontroller {
             appointment.setPhoneNumber(appointmentform.getPhoneNumber());
             appointment.setDetails(appointmentform.getDetails());
             appointment.setDate(appointmentform.getDate());
+
             System.out.println("🏥 Hospital ID: " + appointmentform.getHospitalId());
             System.out.println("🩺 Doctor ID: " + appointmentform.getDoctorId());
             appointmentRepo.save(appointment);
