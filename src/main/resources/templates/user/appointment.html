@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{base :: parent(~{::#content},~{::#title},~{::#script})}" >
 
 <head>
   <title>Book Appointment</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-</head>
+    <title id="title">Book Appointment</title>
+  </head>
 
 <body class="bg-gray-100 text-gray-900">
+  <section id="content">
   <section>
     <div class="max-w-xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
       <!-- Appointment Form -->
@@ -79,7 +79,8 @@
       </div>
     </div>
   </div>
-
+</section>
+<div id="script">
   <script>
     function closeReceiptModal() {
       document.getElementById("receiptModal").classList.add("hidden");
@@ -96,6 +97,7 @@
       document.body.removeChild(link);
     }
   </script>
+  </div>
 </body>
 
 </html>
