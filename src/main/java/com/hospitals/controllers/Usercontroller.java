@@ -139,47 +139,6 @@ public String showAppointmentForm(@PathVariable Long id, Model model, Principal 
         }
     }
 
-    // @GetMapping("/hospital/{id}/book")
-    // public String showAppointmentForm(@PathVariable Long id, Model model,
-    // Principal principal) {
-    // Hospital hospital = hospitalRepository.findById(id)
-    // .orElseThrow(() -> new RuntimeException("Hospital not found"));
-
-    // String username = principal.getName();
-    // User user = userservice.getUserByEmail(username);
-
-    // List<Doctor> doctors = doctor.findByHospitalId(id);
-
-    // // ✅ HARD-CODED TEST: Save appointment and message
-    // String saveMessage = "";
-    // if (!doctors.isEmpty()) {
-    // Appointment a = new Appointment();
-    // a.setUser(user);
-    // a.setHospital(hospital);
-    // a.setDoctor(doctors.get(0)); // First doctor
-    // a.setPatientName("Nandini Test");
-    // a.setPhoneNumber("9999999999");
-    // a.setDetails("Hardcoded test save");
-    // a.setDate(LocalDate.now().plusDays(1));
-
-    // appointmentRepo.save(a);
-
-    // saveMessage = "✅ Hardcoded appointment saved successfully!";
-    // System.out.println("💾 Saved: " + a);
-    // } else {
-    // saveMessage = "⚠️ No doctor found to assign appointment!";
-    // }
-
-    // model.addAttribute("message", saveMessage); // send to view
-    // model.addAttribute("showNavbar", true);
-    // model.addAttribute("hospital", hospital);
-    // model.addAttribute("doctors", doctors);
-    // model.addAttribute("user", user);
-    // model.addAttribute("appointmentform", new AppointmentForm());
-    // model.addAttribute("confirmed", true);
-
-    // return "user/appointment";
-    // }
 
     @PostMapping("/delete/{id}")
     public String deleteHospital(@PathVariable("id") Long id) {

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.hospitals.entities.Appointment;
 import com.hospitals.entities.Doctor;
 import com.hospitals.entities.Hospital;
 import com.hospitals.entities.Provider;
@@ -150,7 +151,11 @@ public String adminDashboard(Model model) {
     model.addAttribute("doctor", doctorservice.getAllDoctors());
     // 🆕 Add these two lines 👇
     model.addAttribute("users", userservice.getAllUsers());  
-    model.addAttribute("appointments", appointmentservice.getAllAppointments());
+        List<Appointment> list = appointmentservice.getAllAppointments();
+    System.out.println("📄 Appointments Fetched: " + list.size());
+
+    model.addAttribute("appointments", list);
+    // model.addAttribute("appointments", appointmentservice.getAllAppointments());
 
     return "admin"; // This matches your Thymeleaf template: admin.html
 }
