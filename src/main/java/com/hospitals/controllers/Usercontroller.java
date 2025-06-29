@@ -117,6 +117,7 @@ public class Usercontroller {
         appointment.setDate(appointmentform.getDate());
 
         appointmentRepo.save(appointment);
+        System.out.println("🎯 Form Data: " + appointmentform);
 
         // 🥰 Re-send model attributes for view
         model.addAttribute("appointment", appointment);
@@ -126,6 +127,7 @@ public class Usercontroller {
         model.addAttribute("showNavbar", true);
         model.addAttribute("doctors", doctor.findByHospitalId(hospital.getId()));
         model.addAttribute("appointmentform", new AppointmentForm());
+
 
         return "user/appointment";
     }
