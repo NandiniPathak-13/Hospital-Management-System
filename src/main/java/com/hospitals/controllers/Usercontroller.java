@@ -72,27 +72,28 @@ public class Usercontroller {
         return "user/dashboard";
     }
 
-    @GetMapping("/hospital/{id}/book")
-    public String showAppointmentForm(@PathVariable Long id, Model model,
-            Principal principal) {
-        Hospital hospital = hospitalRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Hospital not found"));
+   @GetMapping("/hospital/{id}/book")
+public String showAppointmentForm(@PathVariable Long id, Model model, Principal principal) {
+    Hospital hospital = hospitalRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Hospital not found"));
 
-        String username = principal.getName();
-        User user = userservice.getUserByEmail(username);
+    String username = principal.getName();
+    User user = userservice.getUserByEmail(username);
 
-        List<Doctor> doctors = doctor.findByHospitalId(id);
-        AppointmentForm form = new AppointmentForm();
-        form.setHospitalId(id);
-        model.addAttribute("showNavbar", true);
-        model.addAttribute("hospital", hospital);
-        model.addAttribute("doctors", doctors);
-        model.addAttribute("user", user);
-        model.addAttribute("appointmentform", new AppointmentForm());
-        // To control modal visibility
+    List<Doctor> doctors = doctor.findByHospitalId(id);
 
-        return "user/appointment"; // Thymeleaf view
-    }
+    AppointmentForm form = new AppointmentForm();
+    form.setHospitalId(id); // ✅ This is what sets it!
+
+    model.addAttribute("showNavbar", true);
+    model.addAttribute("hospital", hospital);
+    model.addAttribute("doctors", doctors);
+    model.addAttribute("user", user);
+    model.addAttribute("appointmentform", form); // ✅ Correct object sent
+
+    return "user/appointment";
+}
+
 
     @PostMapping("/submit-appointment")
     public String submitAppointment(@ModelAttribute("appointmentform") AppointmentForm appointmentform,
