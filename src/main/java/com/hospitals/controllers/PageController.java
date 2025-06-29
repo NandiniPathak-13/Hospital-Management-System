@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
+import com.hospitals.entities.Appointment;
 import com.hospitals.entities.Appointment;
 import com.hospitals.entities.Doctor;
 import com.hospitals.entities.Hospital;
