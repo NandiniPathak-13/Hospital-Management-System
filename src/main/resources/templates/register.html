@@ -19,9 +19,9 @@
 
             <!-- Divider -->
             <div class="flex items-center mb-4">
-                <hr class="flex-grow border-gray-300 dark:border-gray-600" />
+                <hr class="flex-grow border-gray-600" />
                 <span class="mx-2 text-sm text-gray-400">or</span>
-                <hr class="flex-grow border-gray-300 dark:border-gray-600" />
+                <hr class="flex-grow border-gray-600" />
             </div>
 
             <!-- Form -->
@@ -30,33 +30,33 @@
 
 
                 <div>
-                    <label for="name" class="block text-sm font-medium text-gray-900 dark:text-white">Name</label>
+                    <label for="name" class="block text-sm font-medium text-white">Name</label>
                     <input type="text" id="name" th:field="*{name}" placeholder="Your name" required
-                        class="w-full mt-1 p-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white" />
+                        class="w-full mt-1 p-2.5 rounded-lg border border-gray-600 bg-gray-700 text-white" />
                 </div>
 
                 <!-- Email -->
                 <div>
                     <label for="email" class="block text-sm font-medium text-gray-900 dark:text-white">Email</label>
                     <input type="email" id="email" th:field="*{email}" placeholder="@gmail.com" required
-                        class="w-full mt-1 p-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white" />
+                        class="w-full mt-1 p-2.5 rounded-lg border :border-gray-600 bg-gray-700 text-white" />
                 </div>
 
                 <!-- Phone -->
                 <div>
-                    <label for="phone" class="block text-sm font-medium text-gray-900 dark:text-white">Phone</label>
+                    <label for="phone" class="block text-sm font-medium text-white">Phone</label>
                     <input type="tel" id="phone" th:field="*{phoneNumber}" pattern="[0-9]{10}" maxlength="10"
                         placeholder="123-456-789" required
-                        class="w-full mt-1 p-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white" />
-                    <small class="text-xs text-gray-500 dark:text-gray-400">Must be 10 digits</small>
+                        class="w-full mt-1 p-2.5 rounded-lg border border-gray-600 bg-gray-700 text-white" />
+                    <small class="text-xs text-gray-400">Must be 10 digits</small>
                 </div>
 
                 <!-- Password -->
                 <div>
                     <label for="password"
-                        class="block text-sm font-medium text-gray-900 dark:text-white">Password</label>
+                        class="block text-sm font-medium text-white">Password</label>
                     <input type="password" id="password" th:field="*{password}" placeholder="••••••••" required
-                        class="w-full mt-1 p-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white" />
+                        class="w-full mt-1 p-2.5 rounded-lg border border-gray-600 bg-gray-700 text-white" />
                     <!-- <div id="strengthBar" class="h-2 mt-2 rounded bg-gray-300"></div>
                     <p id="strengthText" class="text-sm mt-1"></p> -->
                 </div>
@@ -64,9 +64,9 @@
                 <!-- Confirm Password -->
                 <div>
                     <label for="confirm-password"
-                        class="block text-sm font-medium text-gray-900 dark:text-white">Confirm Password</label>
+                        class="block text-sm font-medium text-white">Confirm Password</label>
                     <input type="password" id="confirm-password" placeholder="••••••••" required
-                        class="w-full mt-1 p-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white" />
+                        class="w-full mt-1 p-2.5 rounded-lg border border-gray-600 bg-gray-700 text-white" />
                     <!-- <p id="matchText" class="text-sm mt-1 text-red-600"></p> -->
                 </div>
 
