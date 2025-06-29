@@ -1,6 +1,7 @@
 package com.hospitals.controllers;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -33,7 +34,6 @@ import com.hospitals.services.Doctorservice;
 import com.hospitals.services.Hospitalservice;
 import com.hospitals.services.Userservice;
 
-
 @Controller
 @RequestMapping("/user")
 
@@ -62,8 +62,6 @@ public class Usercontroller {
     @Autowired
     private HospitalRepo hospitalRepository;
 
-    
-
     @RequestMapping("/dashboard")
     public String dashboard(Model model) {
 
@@ -74,7 +72,65 @@ public class Usercontroller {
         return "user/dashboard";
     }
 
-       // SHOW APPOINTMENT FORM
+    // @GetMapping("/hospital/{id}/book")
+    // public String showAppointmentForm(@PathVariable Long id, Model model,
+    // Principal principal) {
+    // Hospital hospital = hospitalRepository.findById(id)
+    // .orElseThrow(() -> new RuntimeException("Hospital not found"));
+
+    // String username = principal.getName();
+    // User user = userservice.getUserByEmail(username);
+
+    // List<Doctor> doctors = doctor.findByHospitalId(id);
+
+    // model.addAttribute("showNavbar", true);
+    // model.addAttribute("hospital", hospital);
+    // model.addAttribute("doctors", doctors);
+    // model.addAttribute("user", user);
+    // model.addAttribute("appointmentform", new AppointmentForm());
+    // model.addAttribute("confirmed", true); // To control modal visibility
+
+    // return "user/appointment"; // Thymeleaf view
+    // }
+
+    // @PostMapping("/submit-appointment")
+    // public String submitAppointment(@ModelAttribute AppointmentForm
+    // appointmentform,
+    // Principal principal,
+    // RedirectAttributes redirectAttributes,
+    // Model model) {
+
+    // User user = userservice.getUserByEmail(principal.getName());
+
+    // Hospital hospital =
+    // hospitalRepository.findById(appointmentform.getHospitalId())
+    // .orElseThrow(() -> new RuntimeException("Hospital not found"));
+
+    // Doctor selectedDoctor = doctor.findById(appointmentform.getDoctorId())
+    // .orElseThrow(() -> new RuntimeException("Doctor not found"));
+
+    // Appointment appointment = new Appointment();
+    // appointment.setUser(user);
+    // appointment.setHospital(hospital);
+    // appointment.setDoctor(selectedDoctor);
+    // appointment.setPatientName(appointmentform.getPatientName());
+    // appointment.setPhoneNumber(appointmentform.getPhoneNumber());
+    // appointment.setDetails(appointmentform.getDetails());
+    // appointment.setDate(appointmentform.getDate());
+
+    // appointmentRepo.save(appointment);
+
+    // model.addAttribute("appointment", appointment);
+    // model.addAttribute("hospital", hospital);
+    // model.addAttribute("doctor", selectedDoctor);
+    // model.addAttribute("confirmed", true);
+    // model.addAttribute("showNavbar", true);
+    // model.addAttribute("doctors", doctor.findByHospitalId(hospital.getId()));
+    // model.addAttribute("appointmentform", new AppointmentForm());
+
+    // return "user/appointment";
+    // }
+
     @GetMapping("/hospital/{id}/book")
     public String showAppointmentForm(@PathVariable Long id, Model model, Principal principal) {
         Hospital hospital = hospitalRepository.findById(id)
@@ -85,60 +141,37 @@ public class Usercontroller {
 
         List<Doctor> doctors = doctor.findByHospitalId(id);
 
+        // ✅ HARD-CODED TEST: Save appointment and message
+        String saveMessage = "";
+        if (!doctors.isEmpty()) {
+            Appointment a = new Appointment();
+            a.setUser(user);
+            a.setHospital(hospital);
+            a.setDoctor(doctors.get(0)); // First doctor
+            a.setPatientName("Nandini Test");
+            a.setPhoneNumber("9999999999");
+            a.setDetails("Hardcoded test save");
+            a.setDate(LocalDate.now().plusDays(1));
+
+            appointmentRepo.save(a);
+
+            saveMessage = "✅ Hardcoded appointment saved successfully!";
+            System.out.println("💾 Saved: " + a);
+        } else {
+            saveMessage = "⚠️ No doctor found to assign appointment!";
+        }
+
+        model.addAttribute("message", saveMessage); // send to view
         model.addAttribute("showNavbar", true);
         model.addAttribute("hospital", hospital);
         model.addAttribute("doctors", doctors);
         model.addAttribute("user", user);
         model.addAttribute("appointmentform", new AppointmentForm());
-        model.addAttribute("confirmed", true); // To control modal visibility
+        model.addAttribute("confirmed", true);
 
-        return "user/appointment";  // Thymeleaf view
+        return "user/appointment";
     }
 
-    // SUBMIT APPOINTMENT FORM
-   @PostMapping("/submit-appointment")
-public String submitAppointment(@ModelAttribute AppointmentForm appointmentform,
-                                Principal principal,
-                                RedirectAttributes redirectAttributes,
-                                Model model) {
-
-    // 1. Logged-in user
-    User user = userservice.getUserByEmail(principal.getName());
-
-    // 2. Get hospital
-    Hospital hospital = hospitalRepository.findById(appointmentform.getHospitalId())
-            .orElseThrow(() -> new RuntimeException("Hospital not found"));
-
-    // 3. Get doctor
-    Doctor selectedDoctor = doctor.findById(appointmentform.getDoctorId())
-            .orElseThrow(() -> new RuntimeException("Doctor not found"));
-
-    // 4. Create and set appointment using setters (no builder!)
-    Appointment appointment = new Appointment();
-    appointment.setUser(user);
-    appointment.setHospital(hospital);
-    appointment.setDoctor(selectedDoctor);
-    appointment.setPatientName(appointmentform.getPatientName());
-    appointment.setPhoneNumber(appointmentform.getPhoneNumber());
-    appointment.setDetails(appointmentform.getDetails());
-    appointment.setDate(appointmentform.getDate());
-
-    // 5. Save appointment
-    appointmentRepo.save(appointment);
-
-    // 6. Set receipt data for confirmation display
-    model.addAttribute("appointment", appointment);
-    model.addAttribute("hospital", hospital);
-    model.addAttribute("doctor", selectedDoctor);
-    model.addAttribute("confirmed", true); // toggle receipt
-    model.addAttribute("showNavbar", true);
-    model.addAttribute("doctors", doctor.findByHospitalId(hospital.getId()));
-    model.addAttribute("appointmentform", new AppointmentForm()); // reset form
-
-    return "user/appointment"; // show receipt on same page
-}
-
-   
     @PostMapping("/delete/{id}")
     public String deleteHospital(@PathVariable("id") Long id) {
         hospitalService.deleteHospital(id);
@@ -159,8 +192,6 @@ public String submitAppointment(@ModelAttribute AppointmentForm appointmentform,
 
         return "user/hospitaldetails"; // Make sure this file exists in templates!
     }
-
-   
 
     @GetMapping("/profile")
     public String userProfile(Model model, Authentication authentication,
