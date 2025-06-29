@@ -98,38 +98,42 @@ public class Usercontroller {
             Principal principal,
             RedirectAttributes redirectAttributes,
             Model model) {
+        try {
+            System.out.println("🧾 Received: " + appointmentform);
 
-        User user = userservice.getUserByEmail(principal.getName());
+            User user = userservice.getUserByEmail(principal.getName());
+            Hospital hospital = hospitalRepository.findById(appointmentform.getHospitalId())
+                    .orElseThrow(() -> new RuntimeException("Hospital not found"));
+            Doctor selectedDoctor = doctor.findById(appointmentform.getDoctorId())
+                    .orElseThrow(() -> new RuntimeException("Doctor not found"));
 
-        Hospital hospital = hospitalRepository.findById(appointmentform.getHospitalId())
-                .orElseThrow(() -> new RuntimeException("Hospital not found"));
+            Appointment appointment = new Appointment();
+            appointment.setUser(user);
+            appointment.setHospital(hospital);
+            appointment.setDoctor(selectedDoctor);
+            appointment.setPatientName(appointmentform.getPatientName());
+            appointment.setPhoneNumber(appointmentform.getPhoneNumber());
+            appointment.setDetails(appointmentform.getDetails());
+            appointment.setDate(appointmentform.getDate());
+            System.out.println("🏥 Hospital ID: " + appointmentform.getHospitalId());
+            System.out.println("🩺 Doctor ID: " + appointmentform.getDoctorId());
+            appointmentRepo.save(appointment);
 
-        Doctor selectedDoctor = doctor.findById(appointmentform.getDoctorId())
-                .orElseThrow(() -> new RuntimeException("Doctor not found"));
+            model.addAttribute("appointment", appointment);
+            model.addAttribute("hospital", hospital);
+            model.addAttribute("doctor", selectedDoctor);
+            model.addAttribute("confirmed", true);
+            model.addAttribute("showNavbar", true);
+            model.addAttribute("doctors", doctor.findByHospitalId(hospital.getId()));
+            model.addAttribute("appointmentform", new AppointmentForm());
 
-        Appointment appointment = new Appointment();
-        appointment.setUser(user);
-        appointment.setHospital(hospital);
-        appointment.setDoctor(selectedDoctor);
-        appointment.setPatientName(appointmentform.getPatientName());
-        appointment.setPhoneNumber(appointmentform.getPhoneNumber());
-        appointment.setDetails(appointmentform.getDetails());
-        appointment.setDate(appointmentform.getDate());
+            return "user/appointment";
+        } catch (Exception e) {
+            System.out.println("🔥 Error while submitting appointment: " + e.getMessage());
+            e.printStackTrace(); // Show full stacktrace in logs
 
-        appointmentRepo.save(appointment);
-        System.out.println("🎯 Form Data: " + appointmentform);
-
-        // 🥰 Re-send model attributes for view
-        model.addAttribute("appointment", appointment);
-        model.addAttribute("hospital", hospital);
-        model.addAttribute("doctor", selectedDoctor);
-        model.addAttribute("confirmed", true);
-        model.addAttribute("showNavbar", true);
-        model.addAttribute("doctors", doctor.findByHospitalId(hospital.getId()));
-        model.addAttribute("appointmentform", new AppointmentForm());
-
-
-        return "user/appointment";
+            return "error"; // fallback error page
+        }
     }
 
     // @GetMapping("/hospital/{id}/book")
