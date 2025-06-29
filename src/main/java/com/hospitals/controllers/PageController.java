@@ -151,11 +151,8 @@ public String adminDashboard(Model model) {
     model.addAttribute("doctor", doctorservice.getAllDoctors());
     // 🆕 Add these two lines 👇
     model.addAttribute("users", userservice.getAllUsers());  
-        List<Appointment> list = appointmentservice.getAllAppointments();
-    System.out.println("📄 Appointments Fetched: " + list.size());
-
-    model.addAttribute("appointments", list);
-    // model.addAttribute("appointments", appointmentservice.getAllAppointments());
+       
+    model.addAttribute("appointments", appointmentservice.getAllAppointments());
 
     return "admin"; // This matches your Thymeleaf template: admin.html
 }
