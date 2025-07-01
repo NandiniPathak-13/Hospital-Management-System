@@ -62,7 +62,7 @@
     <div id="receiptModal" th:if="${confirmed}"
       class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
       <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6 text-center">
-        <h2 class="text-xl font-bold text-green-800 mb-4">🎉 Appointment Confirmed!</h2>
+        <h2 class="text-xl font-bold text-green-800 mb-4">Appointment Confirmed!</h2>
 
         <div id="receiptContent" class="text-sm text-gray-800 space-y-2 text-left">
           <p><strong>Patient Name:</strong> <span th:text="${appointment.patientName}"></span></p>
@@ -70,7 +70,7 @@
           <p><strong>Doctor:</strong> <span th:text="${doctor.name}"></span></p>
           <p><strong>Date:</strong> <span th:text="${appointment.date}"></span></p>
           <div class="space-y-1">
-            <p><strong>Approx. Time:</strong> <span id="dynamicTime"></span></p>
+            <p><strong>Approx. Time:</strong> <span class="text-gray-800 " id="dynamicTime"></span></p>
             <p class="text-blue-700 text-sm italic">🕒 Please arrive at the hospital before this time.</p>
           </div>
 
@@ -86,11 +86,27 @@
     </div>
   </section>
   <div id="script">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
     <script>
-      function closeReceiptModal() {
-        document.getElementById("receiptModal").classList.add("hidden");
+      // 🕒 Generate and display random time
+      function generateRandomTime() {
+        const startHour = 10;
+        const endHour = 15;
+        const randomHour = Math.floor(Math.random() * (endHour - startHour)) + startHour;
+        const randomMinute = Math.floor(Math.random() * 60);
+
+        const date = new Date();
+        date.setHours(randomHour, randomMinute);
+
+        const options = { hour: 'numeric', minute: '2-digit', hour12: true };
+        const formattedTime = date.toLocaleTimeString('en-US', options);
+
+        const timeSpan = document.getElementById("dynamicTime");
+        if (timeSpan) timeSpan.innerText = formattedTime;
       }
 
+      // 📄 Download PDF with appointment info
       async function downloadModalReceipt() {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
@@ -127,26 +143,23 @@
         doc.save("appointment_receipt.pdf");
       }
 
+      // ❌ Close modal
+      function closeReceiptModal() {
+        const modal = document.getElementById("receiptModal");
+        if (modal) {
+          modal.classList.add("hidden");
+        }
+      }
 
-      // 👇 Random time generator
-      document.addEventListener("DOMContentLoaded", () => {
-        if (document.getElementById("receiptModal")) {
-          const startHour = 10;
-          const endHour = 15;
-          const randomHour = Math.floor(Math.random() * (endHour - startHour)) + startHour;
-          const randomMinute = Math.floor(Math.random() * 60);
-
-          const date = new Date();
-          date.setHours(randomHour, randomMinute);
-
-          const options = { hour: 'numeric', minute: '2-digit', hour12: true };
-          const formattedTime = date.toLocaleTimeString('en-US', options);
-
-          document.getElementById("dynamicTime").innerText = formattedTime;
+      // 🧠 Detect if modal is visible and inject time
+      window.addEventListener("load", () => {
+        const modal = document.getElementById("receiptModal");
+        if (modal && modal.offsetParent !== null) {
+          generateRandomTime();
         }
       });
-
     </script>
+
   </div>
 </body>
 
