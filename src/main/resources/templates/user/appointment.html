@@ -70,7 +70,7 @@
           <p><strong>Doctor:</strong> <span th:text="${doctor.name}"></span></p>
           <p><strong>Date:</strong> <span th:text="${appointment.date}"></span></p>
           <div class="space-y-1">
-            <p><strong>Approx. Time:</strong> <span class="text-gray-800 " id="dynamicTime"></span></p>
+            <p><strong>Approx. Time:</strong> <span th:text="${approxTime}"></span></p>
             <p class="text-blue-700 text-sm italic">🕒 Please arrive at the hospital before this time.</p>
           </div>
 

@@ -2,7 +2,10 @@ package com.hospitals.controllers;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Random;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -121,6 +124,14 @@ public String showAppointmentForm(@PathVariable Long id, Model model, Principal 
             System.out.println("🏥 Hospital ID: " + appointmentform.getHospitalId());
             System.out.println("🩺 Doctor ID: " + appointmentform.getDoctorId());
             appointmentRepo.save(appointment);
+              LocalTime start = LocalTime.of(9, 0);  // Hospital opens at 9 AM
+    LocalTime end = LocalTime.of(17, 0);   // Closes at 5 PM
+
+    int randomMinutes = new Random().nextInt((int) java.time.Duration.between(start, end).toMinutes());
+    LocalTime approxTime = start.plusMinutes(randomMinutes);
+    String formattedTime = approxTime.format(DateTimeFormatter.ofPattern("hh:mm a"));
+
+    model.addAttribute("approxTime", formattedTime);
 
             model.addAttribute("appointment", appointment);
             model.addAttribute("hospital", hospital);
